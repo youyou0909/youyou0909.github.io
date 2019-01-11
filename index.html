@@ -60,6 +60,16 @@
 
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/11/saveToWallet/">iOS 添加票据到wallet</a>
+    </h2>
+  
+
+      </header>
+    
 
     
       <div class="article-meta">
@@ -74,15 +84,14 @@
       
       
       
-        <hr>
-<h2 id="iOS-添加票据到wallet"><a href="#iOS-添加票据到wallet" class="headerlink" title="iOS 添加票据到wallet"></a>iOS 添加票据到wallet</h2><p>wallet的前身为passbook，2015年WWDC大会苹果正式改名wallet，passbook是苹果2012年iOS6开放出来的新功能.可以帮助用户管理五种类型（Boarding passes（登机牌），Coupons（优惠券），Store cards（购物卡），Event tickets（入场券），Generic（通用卡））的票据</p>
+        <p>wallet的前身为passbook，2015年WWDC大会苹果正式改名wallet，passbook是苹果2012年iOS6开放出来的新功能.可以帮助用户管理五种类型（Boarding passes（登机牌），Coupons（优惠券），Store cards（购物卡），Event tickets（入场券），Generic（通用卡））的票据</p>
 <p>在iOS中一个Pass其实就是一个.pkpass文件，事实上它是一个Zip压缩包，只是这个压缩包要按照一定的目录结构来设计<br>如何创建一个Pass可以参考Apple的文档<br><a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/YourFirst.html#//apple_ref/doc/uid/TP40012195-CH2-SW1" target="_blank" rel="noopener">https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/YourFirst.html#//apple_ref/doc/uid/TP40012195-CH2-SW1</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">-(void)addPassbookView:(NSData *)date&#123;</span><br><span class="line">    NSError *error = nil;</span><br><span class="line">    BOOL passEnbale = [PKPassLibrary isPassLibraryAvailable];//检查pass是否可用</span><br><span class="line">    if (![PKPassLibrary isPassLibraryAvailable]) &#123;//</span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            //[[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">            [[[UIAlertView alloc] initWithTitle:@&quot;Error&quot;</span><br><span class="line">                                        message:@&quot;PassKit not available&quot;</span><br><span class="line">                                       delegate:nil</span><br><span class="line">                              cancelButtonTitle:GDLocalizedString(@&quot;jpyd_ok&quot;)</span><br><span class="line">                              otherButtonTitles: nil] show];</span><br><span class="line">        &#125;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (passEnbale) &#123;</span><br><span class="line">        PKPass *onePass = [[PKPass alloc] initWithData:date error:&amp;error];</span><br><span class="line">        if (error) &#123;</span><br><span class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">               // [[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">                ZNLog(@&quot;!!!!!ERROR:%@&quot;,[error description]);</span><br><span class="line">                </span><br><span class="line">                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:GDLocalizedString(@&quot;jpyd_Friendlyreminder&quot;) message:GDLocalizedString(@&quot;sy_onePass&quot;) delegate:nil cancelButtonTitle:GDLocalizedString(@&quot;jpyd_ok&quot;) otherButtonTitles:nil, nil];</span><br><span class="line">                [alert show];</span><br><span class="line">                [alert release];</span><br><span class="line">            &#125;);</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            PKAddPassesViewController *passAddViewController = [[[PKAddPassesViewController alloc] initWithPass:onePass]autorelease];</span><br><span class="line">            passAddViewController.delegate = self;</span><br><span class="line">            ChinaEastViewController *app = [ChinaEastViewController sharedBankcommViewController];</span><br><span class="line">            //Application tried to present a nil modal view controller on target .修改听云，李良</span><br><span class="line">            if (passAddViewController) &#123;</span><br><span class="line">                [app presentViewController:passAddViewController animated:YES completion:^&#123;</span><br><span class="line">                   // [[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">                &#125;];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/11/saveToWallet/" data-id="cjqrlypvk000kh9lbr0mvwjp8" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/11/saveToWallet/" data-id="cjqrm8v3r000jlglbz3ud5sk1" class="article-share-link">分享</a>
       
     </footer>
 
@@ -130,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqrlypv40007h9lbhknvc8zj" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqrm8v3e0007lglbhy8u0yeu" class="article-share-link">分享</a>
       
     </footer>
 
@@ -180,7 +189,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/Mac端口被占用解决办法/" data-id="cjqrlypv80009h9lbkfds8og3" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/Mac端口被占用解决办法/" data-id="cjqrm8v3h0009lglbvo5eu2uq" class="article-share-link">分享</a>
       
     </footer>
 
@@ -258,7 +267,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqrlypvb000bh9lb8exjitmp" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqrm8v3j000alglbb52rr6kd" class="article-share-link">分享</a>
       
     </footer>
 
@@ -308,7 +317,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/TCP与UDP区别/" data-id="cjqrlypvd000ch9lbvb8lwza3" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/TCP与UDP区别/" data-id="cjqrm8v3j000blglbfk37z7ng" class="article-share-link">分享</a>
       
     </footer>
 
@@ -353,7 +362,7 @@
     <ul class="article-albums-photos">
       
         <li class="article-albums-item">
-          <a class="article-albums-img fancybox" data-fancybox="images" data-caption="" href="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" rel="gallery_cjqrlypve000dh9lbl48ub8t7" title="">
+          <a class="article-albums-img fancybox" data-fancybox="images" data-caption="" href="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" rel="gallery_cjqrm8v3l000clglb26e6bqzf" title="">
             <img class="lazy" data-original="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" itemprop="image" alt="">
           </a>
           
@@ -374,7 +383,61 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrlypve000dh9lbl48ub8t7" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrm8v3l000clglb26e6bqzf" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iOS 协议中定义属性" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/iOS 协议中定义属性/">iOS 协议中定义属性</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/iOS 协议中定义属性/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量 所以就无法调用getter或者setter 否则项目崩溃</p>
+<p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p>
+<p>来看看实例吧：</p>
+<p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p>
+<p>.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrm8v3m000dlglbjhjyirvc" class="article-share-link">分享</a>
       
     </footer>
 
@@ -460,61 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/" data-id="cjqrlypvf000eh9lbp6jr3pl0" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-iOS 协议中定义属性" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/iOS 协议中定义属性/">iOS 协议中定义属性</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/iOS 协议中定义属性/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量 所以就无法调用getter或者setter 否则项目崩溃</p>
-<p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p>
-<p>来看看实例吧：</p>
-<p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p>
-<p>.m</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrlypvg000fh9lbp3rzde4r" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/" data-id="cjqrm8v3n000elglbbwoszohg" class="article-share-link">分享</a>
       
     </footer>
 
@@ -573,7 +582,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqrlypvh000gh9lbcnin4c42" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqrm8v3n000flglbohsboh3q" class="article-share-link">分享</a>
       
     </footer>
 
@@ -622,7 +631,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrlypvi000hh9lbh30weuwr" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrm8v3o000glglbh5jst5oa" class="article-share-link">分享</a>
       
     </footer>
 
