@@ -51,13 +51,12 @@
       
       
       
-        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrm8v3s000llglbk14vq83u" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqro2km8000lcblbovkegljp" class="article-share-link">分享</a>
       
     </footer>
 
@@ -97,7 +96,7 @@
       var gitalk = new Gitalk({
         clientID: 'e154cb1de538be9ff810',
         clientSecret: '2bb7ef73102ec3b739bf5b011863b71f11062351',
-        repo: 'youyouwoxin',
+        repo: 'youyou0909',
         owner: 'youyou0909',
         admin: ['youyou0909'],
         // id: location.pathname,      // Ensure uniqueness and length less than 50
