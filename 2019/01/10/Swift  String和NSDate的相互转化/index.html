@@ -51,7 +51,9 @@
       
       
       
-        <p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br><a id="more"></a><br>let dateString = “20161224191234”<br>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p>
+        <p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p>
+<a id="more"></a>
+<p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p>
 <p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p>
 <p>####2.NSDate 转化成 String</p>
 <p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p>
@@ -85,7 +87,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqrofg1m000bhplborzceqx8" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqront2d000bkglb362got2d" class="article-share-link">分享</a>
       
     </footer>
 

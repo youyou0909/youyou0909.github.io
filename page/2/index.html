@@ -84,12 +84,12 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">导入系统框架</span><br><span class="line">#import &lt;Photos/Photos.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">导入系统框架</span><br><span class="line">#import &lt;Photos/Photos.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrofg1t000ihplbia5pahna" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqront2l000ikglbwpc4aqgj" class="article-share-link">分享</a>
       
     </footer>
 
@@ -132,12 +132,12 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br><span class="line"></span><br><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br><span class="line"></span><br><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrofg1u000jhplb3fyap3nc" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqront2m000jkglbk9brvbs3" class="article-share-link">分享</a>
       
     </footer>
 
@@ -180,14 +180,12 @@
       
       
       
-        <p>注册和不注册的区别主要看下面这两个方法：<br>
-        
-          <a class="article-more-link" href="/2019/01/10/tableviewcell注册和不注册的区别及用法/">阅读全文...</a>
-        
+        <p>注册和不注册的区别主要看下面这两个方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure></p>
+
       
-    </p></div>
+    </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrofg1v000lhplbneqy4nfj" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqront2o000lkglbem1ppf6n" class="article-share-link">分享</a>
       
     </footer>
 
@@ -230,14 +228,13 @@
       
       
       
-        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可<br>
-        
-          <a class="article-more-link" href="/2019/01/10/代码修改xib约束的值注意/">阅读全文...</a>
-        
+        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
       
-    </p></div>
+    </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrofg1w000mhplbpelekvok" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqront2p000mkglbwe03au7i" class="article-share-link">分享</a>
       
     </footer>
 
@@ -285,7 +282,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrofg1x000nhplbhf5dk95l" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqront2q000nkglbn7lve15k" class="article-share-link">分享</a>
       
     </footer>
 
@@ -328,14 +325,14 @@
       
       
       
-        <p>####一、 为什么要使用 NSOperation、NSOperationQueue<br>NSOperation、NSOperationQueue 是基于 GCD 更高一层的封装，完全面向对象。但是比 GCD 更简单易用、代码可读性也更高。<br>
+        <p>####一、 为什么要使用 NSOperation、NSOperationQueue<br>NSOperation、NSOperationQueue 是基于 GCD 更高一层的封装，完全面向对象。但是比 GCD 更简单易用、代码可读性也更高。<br>可添加完成的代码块，在操作完成后执行。<br>添加操作之间的依赖关系，方便的控制执行顺序。</p>
         
           <a class="article-more-link" href="/2019/01/10/NSOperation、NSOperationQueue/">阅读全文...</a>
         
       
-    </p></div>
+    </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqrofg2b000ohplb1lgfu2qh" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqront2y000okglb73yhbzxw" class="article-share-link">分享</a>
       
     </footer>
 
