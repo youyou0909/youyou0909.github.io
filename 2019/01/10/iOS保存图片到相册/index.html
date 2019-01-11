@@ -51,12 +51,16 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">导入系统框架</span><br><span class="line">#import &lt;Photos/Photos.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>需要导入系统框架</p>
+<p>#import &lt;Photos/Photos.h&gt;</p>
+<p>然后我们直接上代码</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrou4fo000hmqlbde45uoyt" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrp3lfh000hpflbb08zu94h" class="article-share-link">分享</a>
       
     </footer>
 
@@ -66,19 +70,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-nav-link">
+      <a href="/2019/01/10/iOS中的@synthesize/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            iOS之创建一个常驻线程
+            iOS中的@synthesize
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/iOS图片拉伸/" class="article-nav-link">
+      <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">iOS图片拉伸</div>
+        <div class="article-nav-title">iOS之创建一个常驻线程</div>
       </a>
     
   </nav>

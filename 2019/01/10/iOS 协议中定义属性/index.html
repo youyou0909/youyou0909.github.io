@@ -51,7 +51,8 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p>
 <p>所以就无法调用getter或者setter 否则项目崩溃</p>
 <p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p>
@@ -63,7 +64,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrou4fk000dmqlb7io0vifd" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrp3lfd000epflb03ovnepp" class="article-share-link">分享</a>
       
     </footer>
 

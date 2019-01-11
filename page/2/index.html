@@ -56,7 +56,7 @@
 
     
       
-        <article id="post-iOS保存图片到相册" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <article id="post-iOS之创建一个常驻线程" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -64,7 +64,7 @@
         
   
     <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/iOS保存图片到相册/">iOS保存图片到相册</a>
+      <a class="article-title" href="/2019/01/10/iOS之创建一个常驻线程/">iOS之创建一个常驻线程</a>
     </h2>
   
 
@@ -73,7 +73,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/iOS保存图片到相册/" class="article-date">
+        <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -84,12 +84,15 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">导入系统框架</span><br><span class="line">#import &lt;Photos/Photos.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+        <p>常驻线程有什么用呢？<br>让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。</p>
+<p>注意 ：不要使用GCD的global队列创建常驻线程<br>原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待</p>
+        
+          <a class="article-more-link" href="/2019/01/10/iOS之创建一个常驻线程/">阅读全文...</a>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrou4fo000hmqlbde45uoyt" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrp3lfh000ipflbpl01ntru" class="article-share-link">分享</a>
       
     </footer>
 
@@ -139,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrou4fp000imqlbdf9396sn" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrp3lfi000jpflbpjq6pyvy" class="article-share-link">分享</a>
       
     </footer>
 
@@ -189,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrou4fq000kmqlbrwwer160" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrp3lfj000lpflb48c595ie" class="article-share-link">分享</a>
       
     </footer>
 
@@ -239,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrou4fr000lmqlb4o0t07s3" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrp3lfk000mpflboe8ls2fk" class="article-share-link">分享</a>
       
     </footer>
 
@@ -287,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrou4fr000mmqlb86bu34gi" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrp3lfl000npflb8uumb0gl" class="article-share-link">分享</a>
       
     </footer>
 
@@ -337,7 +340,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqrou4g5000nmqlb8bvhwtur" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqrp3lg0000opflbeyp83ook" class="article-share-link">分享</a>
       
     </footer>
 

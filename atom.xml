@@ -77,24 +77,6 @@
   </entry>
   
   <entry>
-    <title>Swift  String和NSDate的相互转化</title>
-    <link href="http://yoursite.com/2019/01/10/Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
-    <id>http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:50:52.422Z</updated>
-    
-    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>TCP与UDP区别</title>
     <link href="http://yoursite.com/2019/01/10/TCP%E4%B8%8EUDP%E5%8C%BA%E5%88%AB/"/>
     <id>http://yoursite.com/2019/01/10/TCP与UDP区别/</id>
@@ -106,6 +88,24 @@
     <summary type="html">
     
       &lt;p&gt;TCP与UDP区别总结：&lt;br&gt;1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接&lt;br&gt;2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Swift  String和NSDate的相互转化</title>
+    <link href="http://yoursite.com/2019/01/10/Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
+    <id>http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:50:52.422Z</updated>
+    
+    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
     
     </summary>
     
@@ -140,16 +140,13 @@
     <link href="http://yoursite.com/2019/01/10/iOS%20%E5%8D%8F%E8%AE%AE%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7/"/>
     <id>http://yoursite.com/2019/01/10/iOS 协议中定义属性/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.979Z</updated>
+    <updated>2019-01-11T07:00:37.693Z</updated>
     
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure><p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p><p>所以就无法调用getter或者setter 否则项目崩溃</p><p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p><p>来看看实例吧：</p><p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p><p>.m</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure><a id="more"></a><p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p><p>所以就无法调用getter或者setter 否则项目崩溃</p><p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p><p>来看看实例吧：</p><p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p><p>.m</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
-      
+      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;@protocol CETableViewModelProtocol &amp;lt;NSObject&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic, strong) Class cellClass;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic,  copy ) NSString* cellType;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@end&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -200,6 +197,26 @@
   </entry>
   
   <entry>
+    <title>iOS保存图片到相册</title>
+    <link href="http://yoursite.com/2019/01/10/iOS%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87%E5%88%B0%E7%9B%B8%E5%86%8C/"/>
+    <id>http://yoursite.com/2019/01/10/iOS保存图片到相册/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T07:02:57.397Z</updated>
+    
+    <content type="html"><![CDATA[<p>需要导入系统框架</p><p>#import &lt;Photos/Photos.h&gt;</p><p>然后我们直接上代码</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;需要导入系统框架&lt;/p&gt;
+&lt;p&gt;#import &amp;lt;Photos/Photos.h&amp;gt;&lt;/p&gt;
+&lt;p&gt;然后我们直接上代码&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>iOS之创建一个常驻线程</title>
     <link href="http://yoursite.com/2019/01/10/iOS%E4%B9%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%A9%BB%E7%BA%BF%E7%A8%8B/"/>
     <id>http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/</id>
@@ -212,27 +229,6 @@
     
       &lt;p&gt;常驻线程有什么用呢？&lt;br&gt;让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。&lt;/p&gt;
 &lt;p&gt;注意 ：不要使用GCD的global队列创建常驻线程&lt;br&gt;原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS保存图片到相册</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87%E5%88%B0%E7%9B%B8%E5%86%8C/"/>
-    <id>http://yoursite.com/2019/01/10/iOS保存图片到相册/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.993Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">导入系统框架</span><br><span class="line">#import &lt;Photos/Photos.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
-      
     
     </summary>
     
