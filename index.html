@@ -91,7 +91,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/11/saveToWallet/" data-id="cjqront2n000kkglbn6ngipnk" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/11/saveToWallet/" data-id="cjqrou4fp000jmqlbu4deybn6" class="article-share-link">分享</a>
       
     </footer>
 
@@ -134,12 +134,14 @@
       
       
       
-        <p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//CADisplayLink</span><br><span class="line">CADisplayLink * timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];</span><br><span class="line"></span><br><span class="line">[_link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">- (void)tick:(CADisplayLink *)link &#123;</span><br><span class="line">if (_lastTime == 0) &#123;//上一次屏幕刷新的时间</span><br><span class="line">_lastTime = link.timestamp;//屏幕刷新的时间戳</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_count++;//刷新次数</span><br><span class="line">NSTimeInterval delta = link.timestamp - _lastTime;//获得两次刷新的时间间隔</span><br><span class="line">if (delta &lt; 1) return;//间隔1秒</span><br><span class="line">_lastTime = link.timestamp;</span><br><span class="line">float fps = _count / delta;//fps = 次数/时间间隔</span><br><span class="line">_count = 0;//置零 重新计算</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
+        <p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。</p>
+        
+          <a class="article-more-link" href="/2019/01/10/CADisplayLink小知识点获得FPS/">阅读全文...</a>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqront250007kglbdpmmrnr5" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqrou4fa0007mqlbmjmrlvau" class="article-share-link">分享</a>
       
     </footer>
 
@@ -189,7 +191,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/Mac端口被占用解决办法/" data-id="cjqront2a0009kglb7xabdrv2" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/Mac端口被占用解决办法/" data-id="cjqrou4fe0009mqlbfjzyngq5" class="article-share-link">分享</a>
       
     </footer>
 
@@ -239,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqront2d000bkglb362got2d" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/" data-id="cjqrou4ff000amqlbe6zdmb51" class="article-share-link">分享</a>
       
     </footer>
 
@@ -289,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/TCP与UDP区别/" data-id="cjqront2e000ckglb7320hrqo" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/TCP与UDP区别/" data-id="cjqrou4fh000bmqlb489t5m6p" class="article-share-link">分享</a>
       
     </footer>
 
@@ -334,7 +336,7 @@
     <ul class="article-albums-photos">
       
         <li class="article-albums-item">
-          <a class="article-albums-img fancybox" data-fancybox="images" data-caption="" href="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" rel="gallery_cjqront2g000dkglbn5nu9bxm" title="">
+          <a class="article-albums-img fancybox" data-fancybox="images" data-caption="" href="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" rel="gallery_cjqrou4fj000cmqlbtso758n3" title="">
             <img class="lazy" data-original="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" itemprop="image" alt="">
           </a>
           
@@ -355,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqront2g000dkglbn5nu9bxm" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrou4fj000cmqlbtso758n3" class="article-share-link">分享</a>
       
     </footer>
 
@@ -398,15 +400,19 @@
       
       
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
 <p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p>
-        
-          <a class="article-more-link" href="/2019/01/10/iOS 协议中定义属性/">阅读全文...</a>
-        
+<p>所以就无法调用getter或者setter 否则项目崩溃</p>
+<p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p>
+<p>来看看实例吧：</p>
+<p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p>
+<p>.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqront2i000ekglbgdwr1bfe" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrou4fk000dmqlb7io0vifd" class="article-share-link">分享</a>
       
     </footer>
 
@@ -449,50 +455,14 @@
       
       
       
-        <p>###思考下，下面的有什么不同，分别在什么时候使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">extern NSString *HSCoder;</span><br><span class="line">extern const NSString *HSCoder;</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
-<p>###当我们想全局共用一些数据时，可以用宏、变量、常量</p>
-<p>宏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br></pre></td></tr></table></figure></p>
-<p>变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
-<p>常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">四种写法：</span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
-<p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p>
-<p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
-<p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p>
-<p>###const和static const区分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;; //本文件内部的全局常量</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;//用static修饰后，不能提供外界访问,只能在本文件内访问,或者导入本文件可用（iOS中只有.h文件的导入，所以定义在.h中，如果导入.h头文件那么外部也可以用，如果定义在.m则只能在.m本文件内部使用）</span><br></pre></td></tr></table></figure></p>
-<p>###const修饰位置<br>const右边的总不能被修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">2.NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">3.NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;HSCoder&quot;不能被修改，&quot;*HSCoder&quot;能被修改</span><br></pre></td></tr></table></figure></p>
-<h4 id="“static作用”"><a href="#“static作用”" class="headerlink" title="“static作用”:"></a>“static作用”:</h4><ul>
-<li>修饰局部变量：</li>
-</ul>
-<p>1.延长局部变量的生命周期,程序结束才会销毁。</p>
-<p>2.局部变量只会生成一份内存,只会初始化一次。</p>
-<p>3.改变局部变量的作用域。</p>
-<ul>
-<li>修饰全局变量</li>
-</ul>
-<p>1.只能在本文件中访问,修改全局变量的作用域,生命周期不会改</p>
-<p>2.避免重复定义全局变量</p>
-<p>####const作用：限制类型</p>
-<ul>
-<li>1.const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）</li>
-<li>2.被const修饰的变量是只读的。</li>
-</ul>
-<p>####”extern作用”:</p>
-<ul>
-<li>只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</li>
-<li>“extern工作原理”:</li>
-<li>先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</li>
-</ul>
-<p>知识补充：<br>对于指针a来说，*a就是指针a所指向的内存空间存储的值,&amp;a就是存储这个变量的内存地址,a是指针名</p>
-<p>staic和const联合的作用:声明一个静态的全局只读常量,在”一个文件中”经常使用的字符串常量，可以使用static与const组合</p>
-<p>extern与const组合的作用：在”多个文件中”经常使用的同一个字符串常量，可以使用extern与const组合。</p>
-<ul>
-<li>static与const组合：在每个文件都需要定义一份静态全局变量。</li>
-<li>extern与const组合:只需要定义一份全局变量，多个文件共享</li>
-</ul>
-
+        <p>###思考下，下面的有什么不同，分别在什么时候使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">extern NSString *HSCoder;</span><br><span class="line">extern const NSString *HSCoder;</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-link" href="/2019/01/10/iOS 宏(define)与常量(const)以及extern/">阅读全文...</a>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/" data-id="cjqront2j000fkglbbysz14u8" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/" data-id="cjqrou4fm000emqlbtodykww1" class="article-share-link">分享</a>
       
     </footer>
 
@@ -549,7 +519,7 @@
       
     </p></div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqront2j000gkglbv8j0oahn" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqrou4fm000fmqlb87lj2yz0" class="article-share-link">分享</a>
       
     </footer>
 
@@ -600,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqront2l000hkglbte1e2iia" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrou4fn000gmqlbxh8cdiik" class="article-share-link">分享</a>
       
     </footer>
 
