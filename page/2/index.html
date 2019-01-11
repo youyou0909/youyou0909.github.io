@@ -56,6 +56,258 @@
 
     
       
+        <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/hello-world/">Hello World</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/hello-world/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <blockquote>
+<p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p>
+</blockquote>
+<blockquote>
+<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrehg0900097llbteoiwjeb" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iOS 协议中定义属性" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/iOS 协议中定义属性/">iOS 协议中定义属性</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/iOS 协议中定义属性/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量 所以就无法调用getter或者setter 否则项目崩溃</p>
+<p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p>
+<p>来看看实例吧：</p>
+<p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p>
+<p>.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/iOS 协议中定义属性/" data-id="cjqrehg0a000a7llb2bvb3qdd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iOS 宏(define)与常量(const)以及extern" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/iOS 宏(define)与常量(const)以及extern/">iOS 宏(define)与常量(const)以及extern</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/iOS 宏(define)与常量(const)以及extern/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>###思考下，下面的有什么不同，分别在什么时候使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">extern NSString *HSCoder;</span><br><span class="line">extern const NSString *HSCoder;</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>###当我们想全局共用一些数据时，可以用宏、变量、常量</p>
+<p>宏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br></pre></td></tr></table></figure></p>
+<p>变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">四种写法：</span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p>
+<p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
+<p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p>
+<p>###const和static const区分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;; //本文件内部的全局常量</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;//用static修饰后，不能提供外界访问,只能在本文件内访问,或者导入本文件可用（iOS中只有.h文件的导入，所以定义在.h中，如果导入.h头文件那么外部也可以用，如果定义在.m则只能在.m本文件内部使用）</span><br></pre></td></tr></table></figure></p>
+<p>###const修饰位置<br>const右边的总不能被修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">2.NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">3.NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;HSCoder&quot;不能被修改，&quot;*HSCoder&quot;能被修改</span><br></pre></td></tr></table></figure></p>
+<h4 id="“static作用”"><a href="#“static作用”" class="headerlink" title="“static作用”:"></a>“static作用”:</h4><ul>
+<li>修饰局部变量：</li>
+</ul>
+<p>1.延长局部变量的生命周期,程序结束才会销毁。</p>
+<p>2.局部变量只会生成一份内存,只会初始化一次。</p>
+<p>3.改变局部变量的作用域。</p>
+<ul>
+<li>修饰全局变量</li>
+</ul>
+<p>1.只能在本文件中访问,修改全局变量的作用域,生命周期不会改</p>
+<p>2.避免重复定义全局变量</p>
+<p>####const作用：限制类型</p>
+<ul>
+<li>1.const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）</li>
+<li>2.被const修饰的变量是只读的。</li>
+</ul>
+<p>####”extern作用”:</p>
+<ul>
+<li>只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</li>
+<li>“extern工作原理”:</li>
+<li>先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</li>
+</ul>
+<p>知识补充：<br>对于指针a来说，*a就是指针a所指向的内存空间存储的值,&amp;a就是存储这个变量的内存地址,a是指针名</p>
+<p>staic和const联合的作用:声明一个静态的全局只读常量,在”一个文件中”经常使用的字符串常量，可以使用static与const组合</p>
+<p>extern与const组合的作用：在”多个文件中”经常使用的同一个字符串常量，可以使用extern与const组合。</p>
+<ul>
+<li>static与const组合：在每个文件都需要定义一份静态全局变量。</li>
+<li>extern与const组合:只需要定义一份全局变量，多个文件共享</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/" data-id="cjqrehg0c000b7llbb1r0x4jr" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iOS中的@synthesize" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/iOS中的@synthesize/">iOS中的@synthesize</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/iOS中的@synthesize/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>常见的有两种用法 其实是一个意思</p>
+<ul>
+<li><p>@synthesize student;   等价于 @synthesize student = student</p>
+</li>
+<li><p>@synthesize student = _student</p>
+</li>
+</ul>
+<p>ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的</p>
+<p>我们知道getter和setter方法里面操作的其实就是属性对应的成员变量 成员变量其实本质上就是一个变量指针</p>
+<p>那么调用两者有什么区别呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.name = @&quot;我信你个鬼&quot;;</span><br><span class="line">_name = @&quot;我信你个大头鬼&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>self.name本质上是调用的setter方法setName() 而setter方法是依赖于@property的属性修饰符的，比如retain，assign等属性。也就是会影响其引用计数</p>
+<p>而_name = @”我信你个大头鬼” 只是变量的赋值 不涉及retain、assign等</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqrehg0e000c7llbdwwy3t46" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-iOS之创建一个常驻线程" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
@@ -90,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqred6i5000977lbavmblb2n" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrehg0f000d7llbv8qwusta" class="article-share-link">分享</a>
       
     </footer>
 
@@ -138,7 +390,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqred6i6000a77lba5utii7a" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrehg0g000e7llb1z3hooaa" class="article-share-link">分享</a>
       
     </footer>
 
@@ -186,7 +438,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqred6i7000b77lbiqcuzexs" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrehg0g000f7llbkngh6hdl" class="article-share-link">分享</a>
       
     </footer>
 
@@ -235,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqred6i9000d77lbu5i4t6uk" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrehg0i000h7llbwhx97jph" class="article-share-link">分享</a>
       
     </footer>
 
@@ -284,7 +536,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqred6ia000e77lbk896tfrp" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrehg0i000i7llb6rf7b9ib" class="article-share-link">分享</a>
       
     </footer>
 
@@ -332,128 +584,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqred6ib000f77lb7yqy74wh" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-NSOperation、NSOperationQueue" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/NSOperation、NSOperationQueue/">NSOperation、NSOperationQueue</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/NSOperation、NSOperationQueue/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>####一、 为什么要使用 NSOperation、NSOperationQueue<br>NSOperation、NSOperationQueue 是基于 GCD 更高一层的封装，完全面向对象。但是比 GCD 更简单易用、代码可读性也更高。<br>可添加完成的代码块，在操作完成后执行。<br>添加操作之间的依赖关系，方便的控制执行顺序。<br>设定操作执行的优先级。<br>可以很方便的取消一个操作的执行。<br>使用 KVO 观察对操作执行状态的更改：isExecuteing、isFinished、isCancelled。</p>
-<p>####二、同步异步以及并行串行的区别<br>同步就是指一个进程在执行某个请求的时候，若该请求需要一段时间才能返回信息，那么这个进程将会一直等待下去，直到收到返回信息才继续执行下去；异步是指进程不需要一直等下去，而是继续执行下面的操作，不管其他进程的状态<br>并行串行是指有多个线程的任务的执行方式，串行则多个任务按顺序执行，并行则多个任务会同时执行</p>
-<h4 id="三、-NSOperation-实现多线程的使用步骤分为三步："><a href="#三、-NSOperation-实现多线程的使用步骤分为三步：" class="headerlink" title="三、 NSOperation 实现多线程的使用步骤分为三步："></a>三、 NSOperation 实现多线程的使用步骤分为三步：</h4><p>NSOperation 需要配合 NSOperationQueue 来实现多线程。因为默认情况下，NSOperation 单独使用时系统同步执行操作，配合 NSOperationQueue 我们能更好的实现异步执行。</p>
-<p>1、创建操作：先将需要执行的操作封装到一个NSOperation 对象中。<br>2、创建队列：创建NSOperationQueue对象。<br>3、将操作加入到队列中：将 NSOperation 对象添加到 NSOperationQueue 对象中。</p>
-<p>之后呢，系统就会自动将 NSOperationQueue 中的 NSOperation 取出来，在新线程中执行操作。</p>
-<p>####四、线程死锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//    NSLog(@&quot;1&quot;);</span><br><span class="line">//    dispatch_sync(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">//        NSLog(@&quot;2&quot;);</span><br><span class="line">//    &#125;);</span><br><span class="line">//    NSLog(@&quot;3&quot;);</span><br></pre></td></tr></table></figure></p>
-<p>主线程是串行队列, 一个任务执行完成才能往下执行, 同步线程是一个任务A ,里面的block是同步线程插入到当前线程的另一个任务B ,A要等B执行完才返回 ,B要等A执行完才能执行 ,会相互等待 造成死锁</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">// Do any additional setup after loading the view, typically from a nib.</span><br><span class="line"></span><br><span class="line">//    创建操作</span><br><span class="line">//    [self useInvocationOperation];</span><br><span class="line">////    NSOperation单独使用 同步执行 等待结果返回后执行后面语句</span><br><span class="line">//    NSLog(@&quot;下一个语句&quot;);</span><br><span class="line"></span><br><span class="line">//    [self useBlockOperation];</span><br><span class="line"></span><br><span class="line">//    创建队列</span><br><span class="line">//    [self addOperationToQueue];</span><br><span class="line"></span><br><span class="line">//    添加依赖</span><br><span class="line">//    [self addDependency];</span><br><span class="line"></span><br><span class="line">//    优先级</span><br><span class="line">//    [self queuePriority];</span><br><span class="line"></span><br><span class="line">//    线程间通讯</span><br><span class="line">//    [self communication];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//    线程死锁：主线程是串行队列 一个任务执行完成才能往下执行 同步线程是一个任务A 里面的block是同步线程插入到当前线程的另一个任务B A要等B执行完才返回 B要等A执行完才能执行 会相互等待 造成死锁</span><br><span class="line">//    NSLog(@&quot;1&quot;);</span><br><span class="line">//    dispatch_sync(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">//        NSLog(@&quot;2&quot;);</span><br><span class="line">//    &#125;);</span><br><span class="line">//    NSLog(@&quot;3&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#pragma mark -  创建操作</span><br><span class="line">//NSOperation 单独使用时系统同步执行操作</span><br><span class="line">//NSOperation 是个抽象类，不能用来封装操作。我们只有使用它的子类来封装操作。我们有三种方式来封装操作。</span><br><span class="line">//使用子类 NSInvocationOperation</span><br><span class="line">//使用子类 NSBlockOperation</span><br><span class="line">//自定义继承自 NSOperation 的子类，通过实现内部相应的方法来封装操作。</span><br><span class="line">- (void)useInvocationOperation&#123;</span><br><span class="line">NSInvocationOperation *invocationOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask) object:nil];</span><br><span class="line"></span><br><span class="line">//    开始操作</span><br><span class="line">[invocationOperation start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//NSBlockOperation 还提供了一个方法 addExecutionBlock:，通过 addExecutionBlock: 就可以为 NSBlockOperation 添加额外的操作。这些操作（包括 blockOperationWithBlock 中的操作）可以在不同的线程中同时（并发）执行(完成顺序是不一定的)。只有当所有相关的操作已经完成执行时，才视为完成</span><br><span class="line"></span><br><span class="line">//一般情况下，如果一个 NSBlockOperation 对象封装了多个操作。NSBlockOperation 是否开启新线程，取决于操作的个数。如果添加的操作的个数多，就会自动开启新线程。当然开启的线程数是由系统来决定的。</span><br><span class="line">- (void)useBlockOperation&#123;</span><br><span class="line">NSBlockOperation * blockOperation = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;blockOperation---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">// 2.添加额外的操作</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;2---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;3---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;4---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;5---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;6---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;7---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[blockOperation addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;8---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//    调用 start 方法开始执行操作</span><br><span class="line">[blockOperation start];</span><br><span class="line">&#125;</span><br><span class="line">- (void)useCustomOperation&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - 创建队列</span><br><span class="line">//NSOperationQueue 创建的自定义队列同时具有串行、并发功能，通过设置属性maxConcurrentOperationCount（最大并发操作数）用来控制一个特定队列中可以有多少个操作同时参与并发执行。</span><br><span class="line">//当最大并发操作数为1时，操作是按顺序串行执行的，并且一个操作完成之后，下一个操作才开始执行。当最大操作并发数为2时，操作是并发执行的，可以同时执行两个操作。而开启线程数量是由系统决定的，不需要我们来管理</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//那么我们需要将创建好的操作加入到队列中去。总共有两种方法：</span><br><span class="line">//1、- (void)addOperation:(NSOperation *)op;</span><br><span class="line">//2、- (void)addOperationWithBlock:(void (^)(void))block;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* 使用 addOperation: 将操作加入到操作队列中</span><br><span class="line">*/</span><br><span class="line">- (void)addOperationToQueue &#123;</span><br><span class="line"></span><br><span class="line">// 1.创建队列</span><br><span class="line">NSOperationQueue *queue = [[NSOperationQueue alloc] init];</span><br><span class="line">//    设置最大并发操作数 来控制队列的串行或者并发</span><br><span class="line">queue.maxConcurrentOperationCount = 1;</span><br><span class="line">//    queue.maxConcurrentOperationCount = 8;</span><br><span class="line">// 2.创建操作</span><br><span class="line">// 使用 NSInvocationOperation 创建操作1</span><br><span class="line">NSInvocationOperation *op1 = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask) object:nil];</span><br><span class="line"></span><br><span class="line">// 使用 NSInvocationOperation 创建操作2</span><br><span class="line">NSInvocationOperation *op2 = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask2) object:nil];</span><br><span class="line"></span><br><span class="line">op1.queuePriority = NSOperationQueuePriorityHigh;</span><br><span class="line">op2.queuePriority = NSOperationQueuePriorityLow;</span><br><span class="line"></span><br><span class="line">// 使用 NSBlockOperation 创建操作3</span><br><span class="line">NSBlockOperation *op3 = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;3---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[op3 addExecutionBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;4---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">// 3.使用 addOperation: 添加所有操作到队列中</span><br><span class="line">[queue addOperation:op1]; // [op1 start] 添加到队列中 无需再自己调用start</span><br><span class="line">[queue addOperation:op2]; // [op2 start]</span><br><span class="line">[queue addOperation:op3]; // [op3 start]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* 使用 addOperationWithBlock: 将操作加入到操作队列中</span><br><span class="line">无需自己创建操作对象 直接将操作放到block中</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">- (void)addOperationWithBlockToQueue &#123;</span><br><span class="line">// 1.创建队列</span><br><span class="line">NSOperationQueue *queue = [[NSOperationQueue alloc] init];</span><br><span class="line"></span><br><span class="line">// 2.使用 addOperationWithBlock: 添加操作到队列中</span><br><span class="line">[queue addOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;1---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[queue addOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;2---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">[queue addOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;3---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - NSOperation 操作依赖</span><br><span class="line">//NSOperation、NSOperationQueue 最吸引人的地方是它能添加操作之间的依赖关系。通过操作依赖，我们可以很方便的控制操作之间的执行先后顺序。NSOperation 提供了3个接口供我们管理和查看依赖。</span><br><span class="line">//- (void)addDependency:(NSOperation *)op; 添加依赖，使当前操作依赖于操作 op 的完成。</span><br><span class="line">//- (void)removeDependency:(NSOperation *)op; 移除依赖，取消当前操作对操作 op 的依赖。</span><br><span class="line">//@property (readonly, copy) NSArray&lt;NSOperation *&gt; *dependencies; 在当前操作开始执行之前完成执行的所有操作对象数组。</span><br><span class="line"></span><br><span class="line">- (void)addDependency &#123;</span><br><span class="line"></span><br><span class="line">// 1.创建队列</span><br><span class="line">NSOperationQueue *queue = [[NSOperationQueue alloc] init];</span><br><span class="line"></span><br><span class="line">// 2.创建操作</span><br><span class="line">NSBlockOperation *op1 = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;1---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">NSBlockOperation *op2 = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;2---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">// 3.添加依赖</span><br><span class="line">[op2 addDependency:op1]; // 让op2 依赖于 op1，则先执行op1，在执行op2</span><br><span class="line"></span><br><span class="line">// 4.添加操作到队列中</span><br><span class="line">[queue addOperation:op1];</span><br><span class="line">[queue addOperation:op2];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - NSOperation 优先级 &amp; 服务质量（只是尽可能的 并不是绝对的）</span><br><span class="line">//NSOperation 提供了queuePriority（优先级）属性，queuePriority属性适用于同一操作队列中的操作，不适用于不同操作队列中的操作。默认情况下，所有新创建的操作对象优先级都是NSOperationQueuePriorityNormal。但是我们可以通过setQueuePriority:方法来改变当前操作在同一队列中的执行优先级。</span><br><span class="line"></span><br><span class="line">//对于添加到队列中的操作，首先进入准备就绪的状态（就绪状态取决于操作之间的依赖关系），然后进入就绪状态的操作的开始执行顺序（非结束执行顺序）由操作之间相对的优先级决定（优先级是操作对象自身的属性）</span><br><span class="line"></span><br><span class="line">//准备就绪状态：当一个操作的所有依赖都已经完成时，操作对象通常会进入准备就绪状态，等待执行</span><br><span class="line"></span><br><span class="line">//queuePriority 属性（尽可能的并不是绝对的）决定了进入准备就绪状态下的操作之间的开始执行顺序。并且，优先级不能取代依赖关系。</span><br><span class="line">//如果一个队列中既包含高优先级操作，又包含低优先级操作，并且两个操作都已经准备就绪，那么队列先执行高优先级操作。比如上例中，如果 op1 和 op4 是不同优先级的操作，那么就会先执行优先级高的操作。</span><br><span class="line">//如果，一个队列中既包含了准备就绪状态的操作，又包含了未准备就绪的操作，未准备就绪的操作优先级比准备就绪的操作优先级高。那么，虽然准备就绪的操作优先级低，也会优先执行。优先级不能取代依赖关系。如果要控制操作间的启动顺序，则必须使用依赖关系</span><br><span class="line"></span><br><span class="line">- (void)queuePriority&#123;</span><br><span class="line">// 1.创建队列</span><br><span class="line">NSOperationQueue *queue = [[NSOperationQueue alloc] init];</span><br><span class="line">//    设置最大并发操作数 来控制队列的串行或者并发</span><br><span class="line">//    queue.maxConcurrentOperationCount = 1; //串行</span><br><span class="line">//        queue.maxConcurrentOperationCount = 8;//并发</span><br><span class="line">// 2.创建操作</span><br><span class="line">// 使用 NSInvocationOperation 创建操作1</span><br><span class="line">NSInvocationOperation *op1 = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask) object:nil];</span><br><span class="line"></span><br><span class="line">// 使用 NSInvocationOperation 创建操作2</span><br><span class="line">NSInvocationOperation *op2 = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask2) object:nil];</span><br><span class="line"></span><br><span class="line">// 使用 NSInvocationOperation 创建操作2</span><br><span class="line">NSInvocationOperation *op3 = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(invocationTask3) object:nil];</span><br><span class="line"></span><br><span class="line">//    同一个队列中的操作优先级 执行的先后 并不是结束的先后</span><br><span class="line">//    op1.queuePriority = NSOperationQueuePriorityVeryHigh;</span><br><span class="line">//    op2.queuePriority = NSOperationQueuePriorityHigh;</span><br><span class="line">//    op3.queuePriority = NSOperationQueuePriorityNormal;</span><br><span class="line"></span><br><span class="line">//    服务质量  在iOS 8.0前,通过设置操作的优先级,尽可能的保证某个操作优先处理,随着硬件性能上的提升,通过设置优先级效果已经越来越不明显,在iOS 8.0后,推出了服务质量,通过设置服务质量,让系统优先处理某一个操作 目前也是越来越不明显</span><br><span class="line">//    op1.qualityOfService = NSQualityOfServiceUserInteractive;</span><br><span class="line">//    op2.qualityOfService = NSQualityOfServiceBackground;</span><br><span class="line">//    op3.qualityOfService = NSQualityOfServiceDefault;</span><br><span class="line"></span><br><span class="line">// 3.使用 addOperation: 添加所有操作到队列中</span><br><span class="line">[queue addOperation:op1]; // [op1 start] 添加到队列中 无需再自己调用start</span><br><span class="line">[queue addOperation:op2]; // [op2 start]</span><br><span class="line">[queue addOperation:op3]; // [op3 start]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - NSOperation、NSOperationQueue 线程间的通信</span><br><span class="line">/**</span><br><span class="line">* 线程间通信</span><br><span class="line">*/</span><br><span class="line">- (void)communication &#123;</span><br><span class="line"></span><br><span class="line">// 1.创建队列</span><br><span class="line">NSOperationQueue *queue = [[NSOperationQueue alloc]init];</span><br><span class="line"></span><br><span class="line">// 2.添加操作</span><br><span class="line">[queue addOperationWithBlock:^&#123;</span><br><span class="line">// 异步进行耗时操作</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;1---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 回到主线程</span><br><span class="line">[[NSOperationQueue mainQueue] addOperationWithBlock:^&#123;</span><br><span class="line">// 进行一些 UI 刷新等操作</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">NSLog(@&quot;2---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#pragma mark - 执行的操作</span><br><span class="line">- (void)invocationTask&#123;</span><br><span class="line">NSLog(@&quot;1&quot;);</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">NSLog(@&quot;invocationOperation1---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)invocationTask2&#123;</span><br><span class="line">NSLog(@&quot;2&quot;);</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">NSLog(@&quot;invocationOperation2---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)invocationTask3&#123;</span><br><span class="line">NSLog(@&quot;3&quot;);</span><br><span class="line">for (int i = 0; i &lt; 2; i++) &#123;</span><br><span class="line">NSLog(@&quot;invocationOperation3---%@&quot;, [NSThread currentThread]); // 打印当前线程</span><br><span class="line">[NSThread sleepForTimeInterval:2]; // 模拟耗时操作</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqred6ih000g77lbgwm5g2ww" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-UICollectionView系列一、初识与简单使用UICollectionView" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/UICollectionView系列一、初识与简单使用UICollectionView/">UICollectionView系列一、初识与简单使用UICollectionView</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/UICollectionView系列一、初识与简单使用UICollectionView/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>###一、简介<br>UICollectionView是iOS6之后引入的一个新的UI控件，它和UITableView有着诸多的相似之处，其中许多代理方法都十分类似。简单来说，UICollectionView是比UITbleView更加强大的一个UI控件，有如下几个方面：</p>
-<p>1、支持水平和垂直两种方向的布局</p>
-<p>2、通过layout配置方式进行布局</p>
-<p>3、类似于TableView中的cell特性外，CollectionView中的Item大小和位置可以自由定义</p>
-<p>4、通过layout布局回调的代理方法，可以动态的定制每个item的大小和collection的大体布局属性</p>
-<p>5、更加强大一点，完全自定义一套layout布局方案，可以实现意想不到的效果</p>
-<h3 id="二、先来实现一个最简单的九宫格类布局"><a href="#二、先来实现一个最简单的九宫格类布局" class="headerlink" title="二、先来实现一个最简单的九宫格类布局"></a>二、先来实现一个最简单的九宫格类布局</h3><p>在了解UICollectionView的更多属性前，我们先来使用其进行一个最简单的流布局试试看，在controller的viewDidLoad中添加如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//创建一个layout布局类</span><br><span class="line">UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc]init];</span><br><span class="line">//设置布局方向为垂直流布局</span><br><span class="line">layout.scrollDirection = UICollectionViewScrollDirectionVertical;</span><br><span class="line">//设置每个item的大小为100*100</span><br><span class="line">layout.itemSize = CGSizeMake(100, 100);</span><br><span class="line">//创建collectionView 通过一个布局策略layout来创建</span><br><span class="line">UICollectionView * collect = [[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];</span><br><span class="line">//代理设置</span><br><span class="line">collect.delegate=self;</span><br><span class="line">collect.dataSource=self;</span><br><span class="line">//注册item类型 这里使用系统的类型</span><br><span class="line">[collect registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@&quot;cellid&quot;];</span><br><span class="line"></span><br><span class="line">[self.view addSubview:collect];</span><br></pre></td></tr></table></figure></p>
-<p>这里有一点需要注意，collectionView在完成代理回调前，必须注册一个cell，类似如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[collect registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@&quot;cellid&quot;];</span><br></pre></td></tr></table></figure></p>
-<p>这和tableView有些类似，又有些不同，因为tableView除了注册cell的方法外，还可以通过临时创建来做：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//tableView在从复用池中取cell的时候，有如下两种方法</span><br><span class="line">//使用这种方式如果复用池中无，是可以返回nil的，我们在临时创建即可</span><br><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier;</span><br><span class="line">//6.0后使用如下的方法直接从注册的cell类获取创建，如果没有注册 会崩溃</span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0);</span><br></pre></td></tr></table></figure></p>
-<p>我们可以分析：因为UICollectionView是iOS6.0之前的新类，因此这里统一了从复用池中获取cell的方法，没有再提供可以返回nil的方式，并且在UICollectionView的回调代理中，只能使用从复用池中获取cell的方式进行cell的返回，其他方式会崩溃，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//这是正确的方法</span><br><span class="line">-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">UICollectionViewCell * cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@&quot;cellid&quot; forIndexPath:indexPath];</span><br><span class="line">cell.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];</span><br><span class="line">return cell;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//这样做会崩溃</span><br><span class="line">-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">//    UICollectionViewCell * cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@&quot;cellid&quot; forIndexPath:indexPath];</span><br><span class="line">//    cell.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];</span><br><span class="line">UICollectionViewCell * cell = [[UICollectionViewCell alloc]init];</span><br><span class="line">return cell;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面错误的方式会崩溃，信息如下，让我们使用从复用池中取cell的方式：</p>
-<p>[图片上传失败…(image-9b7f2f-1527661822069)]</p>
-<p>上面的设置完成后，我们来实现如下几个代理方法：<br>这里与TableView的回调方式十分类似</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//返回分区个数</span><br><span class="line">-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView&#123;</span><br><span class="line">return 1;</span><br><span class="line">&#125;</span><br><span class="line">//返回每个分区的item个数</span><br><span class="line">-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section&#123;</span><br><span class="line">return 10;</span><br><span class="line">&#125;</span><br><span class="line">//返回每个item</span><br><span class="line">-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">UICollectionViewCell * cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@&quot;cellid&quot; forIndexPath:indexPath];</span><br><span class="line">cell.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];</span><br><span class="line">return cell;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>效果如下：<br><img src="https://upload-images.jianshu.io/upload_images/4055583-cf3b28497bffd73a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20170628101412865.png"></p>
-<p>同样，如果内容的大小超出一屏，和tableView类似是可以进行视图滑动的。</p>
-<p>还有一点细节，我们在上面设置布局方式的时候设置了垂直布局：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">layout.scrollDirection = UICollectionViewScrollDirectionVertical;</span><br><span class="line">//这个是水平布局</span><br><span class="line">//layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;</span><br></pre></td></tr></table></figure></p>
-<p>这样系统会在一行充满后进行第二行的排列，如果设置为水平布局，则会在一列充满后，进行第二列的布局，这种方式也被称为流式布局</p>
-<p>###三、UICollectionView中的常用方法和属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">//通过一个布局策略初识化CollectionView</span><br><span class="line">- (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout;</span><br><span class="line"></span><br><span class="line">//获取和设置collection的layout</span><br><span class="line">@property (nonatomic, strong) UICollectionViewLayout *collectionViewLayout;</span><br><span class="line"></span><br><span class="line">//数据源和代理</span><br><span class="line">@property (nonatomic, weak, nullable) id &lt;UICollectionViewDelegate&gt; delegate;</span><br><span class="line">@property (nonatomic, weak, nullable) id &lt;UICollectionViewDataSource&gt; dataSource;</span><br><span class="line"></span><br><span class="line">//从一个class或者xib文件进行cell(item)的注册</span><br><span class="line">- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;</span><br><span class="line">- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;</span><br><span class="line"></span><br><span class="line">//下面两个方法与上面相似，这里注册的是头视图或者尾视图的类</span><br><span class="line">//其中第二个参数是设置 头视图或者尾视图 系统为我们定义好了这两个字符串</span><br><span class="line">//UIKIT_EXTERN NSString *const UICollectionElementKindSectionHeader NS_AVAILABLE_IOS(6_0);</span><br><span class="line">//UIKIT_EXTERN NSString *const UICollectionElementKindSectionFooter NS_AVAILABLE_IOS(6_0);</span><br><span class="line">- (void)registerClass:(nullable Class)viewClass forSupplementaryViewOfKind:(NSString *)elementKind withReuseIdentifier:(NSString *)identifier;</span><br><span class="line">- (void)registerNib:(nullable UINib *)nib forSupplementaryViewOfKind:(NSString *)kind withReuseIdentifier:(NSString *)identifier;</span><br><span class="line"></span><br><span class="line">//这两个方法是从复用池中取出cell或者头尾视图</span><br><span class="line">- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath;</span><br><span class="line">- (__kindof UICollectionReusableView *)dequeueReusableSupplementaryViewOfKind:(NSString *)elementKind withReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath;</span><br><span class="line"></span><br><span class="line">//设置是否允许选中 默认yes</span><br><span class="line">@property (nonatomic) BOOL allowsSelection;</span><br><span class="line"></span><br><span class="line">//设置是否允许多选 默认no</span><br><span class="line">@property (nonatomic) BOOL allowsMultipleSelection;</span><br><span class="line"></span><br><span class="line">//获取所有选中的item的位置信息</span><br><span class="line">- (nullable NSArray&lt;NSIndexPath *&gt; *)indexPathsForSelectedItems; </span><br><span class="line"></span><br><span class="line">//设置选中某一item，并使视图滑动到相应位置，scrollPosition是滑动位置的相关参数，如下：</span><br><span class="line">/*</span><br><span class="line">typedef NS_OPTIONS(NSUInteger, UICollectionViewScrollPosition) &#123;</span><br><span class="line">//无</span><br><span class="line">UICollectionViewScrollPositionNone                 = 0,</span><br><span class="line">//垂直布局时使用的 对应上中下</span><br><span class="line">UICollectionViewScrollPositionTop                  = 1 &lt;&lt; 0,</span><br><span class="line">UICollectionViewScrollPositionCenteredVertically   = 1 &lt;&lt; 1,</span><br><span class="line">UICollectionViewScrollPositionBottom               = 1 &lt;&lt; 2,</span><br><span class="line">//水平布局时使用的  对应左中右</span><br><span class="line">UICollectionViewScrollPositionLeft                 = 1 &lt;&lt; 3,</span><br><span class="line">UICollectionViewScrollPositionCenteredHorizontally = 1 &lt;&lt; 4,</span><br><span class="line">UICollectionViewScrollPositionRight                = 1 &lt;&lt; 5</span><br><span class="line">&#125;;</span><br><span class="line">*/</span><br><span class="line">- (void)selectItemAtIndexPath:(nullable NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UICollectionViewScrollPosition)scrollPosition;</span><br><span class="line"></span><br><span class="line">//将某一item取消选中</span><br><span class="line">- (void)deselectItemAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated;</span><br><span class="line"></span><br><span class="line">//重新加载数据</span><br><span class="line">- (void)reloadData;</span><br><span class="line"></span><br><span class="line">//下面这两个方法，可以重新设置collection的布局，后面的方法多了一个布局完成后的回调，iOS7后可以用</span><br><span class="line">//使用这两个方法可以产生非常炫酷的动画效果</span><br><span class="line">- (void)setCollectionViewLayout:(UICollectionViewLayout *)layout animated:(BOOL)animated;</span><br><span class="line">- (void)setCollectionViewLayout:(UICollectionViewLayout *)layout animated:(BOOL)animated completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);</span><br><span class="line"></span><br><span class="line">//下面这些方法更加强大，我们可以对布局更改后的动画进行设置</span><br><span class="line">//这个方法传入一个布局策略layout，系统会开始进行布局渲染，返回一个UICollectionViewTransitionLayout对象</span><br><span class="line">//这个UICollectionViewTransitionLayout对象管理动画的相关属性，我们可以进行设置</span><br><span class="line">- (UICollectionViewTransitionLayout *)startInteractiveTransitionToCollectionViewLayout:(UICollectionViewLayout *)layout completion:(nullable UICollectionViewLayoutInteractiveTransitionCompletion)completion NS_AVAILABLE_IOS(7_0);</span><br><span class="line">//准备好动画设置后，我们需要调用下面的方法进行布局动画的展示，之后会调用上面方法的block回调</span><br><span class="line">- (void)finishInteractiveTransition NS_AVAILABLE_IOS(7_0);</span><br><span class="line">//调用这个方法取消上面的布局动画设置，之后也会进行上面方法的block回调</span><br><span class="line">- (void)cancelInteractiveTransition NS_AVAILABLE_IOS(7_0);</span><br><span class="line"></span><br><span class="line">//获取分区数</span><br><span class="line">- (NSInteger)numberOfSections;</span><br><span class="line"></span><br><span class="line">//获取某一分区的item数</span><br><span class="line">- (NSInteger)numberOfItemsInSection:(NSInteger)section;</span><br><span class="line"></span><br><span class="line">//下面两个方法获取item或者头尾视图的layout属性，这个UICollectionViewLayoutAttributes对象</span><br><span class="line">//存放着布局的相关数据，可以用来做完全自定义布局，后面博客会介绍</span><br><span class="line">- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath;</span><br><span class="line">- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath;</span><br><span class="line"></span><br><span class="line">//获取某一点所在的indexpath位置</span><br><span class="line">- (nullable NSIndexPath *)indexPathForItemAtPoint:(CGPoint)point;</span><br><span class="line"></span><br><span class="line">//获取某个cell所在的indexPath</span><br><span class="line">- (nullable NSIndexPath *)indexPathForCell:(UICollectionViewCell *)cell;</span><br><span class="line"></span><br><span class="line">//根据indexPath获取cell</span><br><span class="line">- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;</span><br><span class="line"></span><br><span class="line">//获取所有可见cell的数组</span><br><span class="line">- (NSArray&lt;__kindof UICollectionViewCell *&gt; *)visibleCells;</span><br><span class="line"></span><br><span class="line">//获取所有可见cell的位置数组</span><br><span class="line">- (NSArray&lt;NSIndexPath *&gt; *)indexPathsForVisibleItems;</span><br><span class="line"></span><br><span class="line">//下面三个方法是iOS9中新添加的方法，用于获取头尾视图</span><br><span class="line">- (UICollectionReusableView *)supplementaryViewForElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(9_0);</span><br><span class="line">- (NSArray&lt;UICollectionReusableView *&gt; *)visibleSupplementaryViewsOfKind:(NSString *)elementKind NS_AVAILABLE_IOS(9_0);</span><br><span class="line">- (NSArray&lt;NSIndexPath *&gt; *)indexPathsForVisibleSupplementaryElementsOfKind:(NSString *)elementKind NS_AVAILABLE_IOS(9_0);</span><br><span class="line"></span><br><span class="line">//使视图滑动到某一位置，可以带动画效果</span><br><span class="line">- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated;</span><br><span class="line"></span><br><span class="line">//下面这些方法用于动态添加，删除，移动某些分区获取items</span><br><span class="line">- (void)insertSections:(NSIndexSet *)sections;</span><br><span class="line">- (void)deleteSections:(NSIndexSet *)sections;</span><br><span class="line">- (void)reloadSections:(NSIndexSet *)sections;</span><br><span class="line">- (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection;</span><br><span class="line"></span><br><span class="line">- (void)insertItemsAtIndexPaths:(NSArray&lt;NSIndexPath *&gt; *)indexPaths;</span><br><span class="line">- (void)deleteItemsAtIndexPaths:(NSArray&lt;NSIndexPath *&gt; *)indexPaths;</span><br><span class="line">- (void)reloadItemsAtIndexPaths:(NSArray&lt;NSIndexPath *&gt; *)indexPaths;</span><br><span class="line">- (void)moveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)newIndexPath;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/UICollectionView系列一、初识与简单使用UICollectionView/" data-id="cjqred6ii000h77lbk7pb3y4s" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrehg0j000j7llbq3uwm4ro" class="article-share-link">分享</a>
       
     </footer>
 
@@ -473,7 +604,7 @@
   
     <nav class="page-nav">
       
-      <a class="extend prev" rel="prev" href="/">前一篇</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">前一篇</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">后一篇</a>
     </nav>
   
 </section>
