@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    UICollectionView系列五——UICollectionView圆环布局的实现 |
+    
+    悠悠我心</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-UICollectionView系列五——UICollectionView圆环布局的实现" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      UICollectionView系列五——UICollectionView圆环布局的实现
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/UICollectionView系列五——UICollectionView圆环布局的实现/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h3 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h3><p>前边的几篇博客，我们了解了UICollectionView的基本用法以及一些扩展，在不定高的瀑布流布局中，我们发现，可以通过设置具体的布局属性类UICollectionViewLayoutAttributes来设置设置每个item的具体位置，我们可以再扩展一下，如果位置我们可以自由控制，那个布局我们也可以更加灵活，就比如创建一个如下的circleLayout：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4055583-0c593c22fd6a5ff5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20170628101727120.png"></p>
+<p>这种布局方式在apple的官方文档中也有介绍，是UICollectionView的一个应用示例。</p>
+<h3 id="二、设计一个圆环布局"><a href="#二、设计一个圆环布局" class="headerlink" title="二、设计一个圆环布局"></a>二、设计一个圆环布局</h3><p>先自定义一个layout类，这个类继承于UICollectionViewLayout，UICollectionLayout是一个布局抽象基类，我们要使用自定义的布局方式，必须将其子类化，可能你还记得，我们在进行瀑布流布局的时候使用过UICollectionViewFlowLayout类，这个类就是继承于UICollectionViewLayout类，系统为我们实现好的一个布局方案。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@interface MyLayout : UICollectionViewLayout</span><br><span class="line">//这个int值存储有多少个item</span><br><span class="line">@property(nonatomic,assign)int itemCount;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure></p>
+<p>我们需要重写这个类的三个方法，来进行圆环布局的设置，首先是prepareLayout，为布局做一些准备工作，使用collectionViewContentSize来设置内容的区域大小，最后使用layoutAttributesForElementsInRect方法来返回我们的布局信息字典，这个和前面瀑布流布局的思路是一样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">@implementation MyLayout</span><br><span class="line">&#123;</span><br><span class="line">NSMutableArray * _attributeAttay;</span><br><span class="line">&#125;</span><br><span class="line">-(void)prepareLayout&#123;</span><br><span class="line">[super prepareLayout];</span><br><span class="line">//获取item的个数</span><br><span class="line">_itemCount = (int)[self.collectionView numberOfItemsInSection:0];</span><br><span class="line">_attributeAttay = [[NSMutableArray alloc]init];</span><br><span class="line">//先设定大圆的半径 取长和宽最短的</span><br><span class="line">CGFloat radius = MIN(self.collectionView.frame.size.width, self.collectionView.frame.size.height)/2;</span><br><span class="line">//计算圆心位置</span><br><span class="line">CGPoint center = CGPointMake(self.collectionView.frame.size.width/2, self.collectionView.frame.size.height/2);</span><br><span class="line">//设置每个item的大小为50*50 则半径为25</span><br><span class="line">for (int i=0; i&lt;_itemCount; i++) &#123;</span><br><span class="line">UICollectionViewLayoutAttributes * attris = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];</span><br><span class="line">//设置item大小</span><br><span class="line">attris.size = CGSizeMake(50, 50);</span><br><span class="line">//计算每个item的圆心位置</span><br><span class="line">/*</span><br><span class="line">.</span><br><span class="line">. .</span><br><span class="line">.   . r</span><br><span class="line">.     .</span><br><span class="line">.........</span><br><span class="line">*/</span><br><span class="line">//计算每个item中心的坐标</span><br><span class="line">//算出的x y值还要减去item自身的半径大小</span><br><span class="line">float x = center.x+cosf(2*M_PI/_itemCount*i)*(radius-25);</span><br><span class="line">float y = center.y+sinf(2*M_PI/_itemCount*i)*(radius-25);</span><br><span class="line"></span><br><span class="line">attris.center = CGPointMake(x, y);</span><br><span class="line">[_attributeAttay addObject:attris];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">//设置内容区域的大小</span><br><span class="line">-(CGSize)collectionViewContentSize&#123;</span><br><span class="line">return self.collectionView.frame.size;</span><br><span class="line">&#125;</span><br><span class="line">//返回设置数组</span><br><span class="line">-(NSArray&lt;UICollectionViewLayoutAttributes *&gt; *)layoutAttributesForElementsInRect:(CGRect)rect&#123;</span><br><span class="line">return _attributeAttay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在viewController中代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">// Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">MyLayout * layout = [[MyLayout alloc]init];</span><br><span class="line">UICollectionView * collect  = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 400) collectionViewLayout:layout];</span><br><span class="line">collect.delegate=self;</span><br><span class="line">collect.dataSource=self;</span><br><span class="line"></span><br><span class="line">[collect registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@&quot;cellid&quot;];</span><br><span class="line">[self.view addSubview:collect];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView&#123;</span><br><span class="line">return 1;</span><br><span class="line">&#125;</span><br><span class="line">-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section&#123;</span><br><span class="line">return 10;</span><br><span class="line">&#125;</span><br><span class="line">-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">UICollectionViewCell * cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@&quot;cellid&quot; forIndexPath:indexPath];</span><br><span class="line">cell.layer.masksToBounds = YES;</span><br><span class="line">cell.layer.cornerRadius = 25;</span><br><span class="line">cell.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];</span><br><span class="line">return cell;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如上非常简单的一些逻辑控制，我们就实现哦圆环布局，随着item的多少，布局会自动调整，如果不是UICollectionView的功劳，实现这样的功能，我们可能要写上一阵子了^_^。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4055583-93fb17032209ef0e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20170628101753728.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/UICollectionView系列五——UICollectionView圆环布局的实现/" data-id="cjqrd1sfh000727lb13emr0vw" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/01/10/UICollectionView系列二、UICollectionView的代理方法/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            UICollectionView系列二、UICollectionView的代理方法
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/01/10/UICollectionView系列四、自定义FlowLayout进行瀑布流布局/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">UICollectionView系列四、自定义FlowLayout进行瀑布流布局</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <ul class="list-inline">
+      <li>&copy; 2019 悠悠我心</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://zhwangart.github.io">zhwangart</a></li>
+      <!--
+      <li><a href="/">悠悠我心</a></li>
+      -->
+    </ul>
+  </div>
+</footer>
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="悠悠我心"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

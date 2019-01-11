@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Hello World |
+    tableviewcell注册和不注册的区别及用法 |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-tableviewcell注册和不注册的区别及用法" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      tableviewcell注册和不注册的区别及用法
     </h1>
   
 
@@ -40,7 +40,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/hello-world/" class="article-date">
+        <a href="/2019/01/10/tableviewcell注册和不注册的区别及用法/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -51,17 +51,13 @@
       
       
       
-        <blockquote>
-<p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！</p>
-</blockquote>
-<blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
-</blockquote>
+        <p>注册和不注册的区别主要看下面这两个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrd1sfj000927lb75afjybw" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrd1sfq000f27lbbmn46w3m" class="article-share-link">分享</a>
       
     </footer>
 
@@ -71,17 +67,17 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/UICollectionView系列四、自定义FlowLayout进行瀑布流布局/" class="article-nav-link">
+      <a href="/2019/01/10/iOS图片拉伸/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            UICollectionView系列四、自定义FlowLayout进行瀑布流布局
+            iOS图片拉伸
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/hello-world的副本/" class="article-nav-link">
+      <a href="/2019/01/10/代码修改xib约束的值注意/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
         <div class="article-nav-title">Hello World</div>
       </a>

@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-代码修改xib约束的值注意" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -40,7 +40,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/hello-world/" class="article-date">
+        <a href="/2019/01/10/代码修改xib约束的值注意/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -51,17 +51,13 @@
       
       
       
-        <blockquote>
-<p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！</p>
-</blockquote>
-<blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
-</blockquote>
+        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrd1sfj000927lb75afjybw" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrd1sfr000g27lbaae7e6s5" class="article-share-link">分享</a>
       
     </footer>
 
@@ -71,17 +67,17 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/UICollectionView系列四、自定义FlowLayout进行瀑布流布局/" class="article-nav-link">
+      <a href="/2019/01/10/tableviewcell注册和不注册的区别及用法/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            UICollectionView系列四、自定义FlowLayout进行瀑布流布局
+            tableviewcell注册和不注册的区别及用法
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/hello-world的副本/" class="article-nav-link">
+      <a href="/2019/01/10/NSOperation、NSOperationQueue/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
         <div class="article-nav-title">Hello World</div>
       </a>

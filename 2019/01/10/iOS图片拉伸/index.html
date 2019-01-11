@@ -7,6 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
+    iOS图片拉伸 |
     
     悠悠我心</title>
   
@@ -22,15 +23,25 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-FirstNight" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-iOS图片拉伸" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS图片拉伸
+    </h1>
+  
+
+      </header>
     
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/FirstNight/" class="article-date">
-  <time datetime="2019-01-10T02:56:20.037Z" itemprop="datePublished">2019-01-10</time>
+        <a href="/2019/01/10/iOS图片拉伸/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
       </div>
@@ -40,15 +51,12 @@
       
       
       
-        <hr>
-<h2 id="First-Night"><a href="#First-Night" class="headerlink" title=" First Night"></a> First Night</h2><blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
-</blockquote>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br><span class="line"></span><br><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/FirstNight/" data-id="cjqrc52ny0000zflbc4pimcsj" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrd1sfo000d27lbnsgg4src" class="article-share-link">分享</a>
       
     </footer>
 
@@ -58,19 +66,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/11/saveToWallet/" class="article-nav-link">
+      <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            (no title)
+            iOS之创建一个常驻线程
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/hello-world/" class="article-nav-link">
+      <a href="/2019/01/10/tableviewcell注册和不注册的区别及用法/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">tableviewcell注册和不注册的区别及用法</div>
       </a>
     
   </nav>

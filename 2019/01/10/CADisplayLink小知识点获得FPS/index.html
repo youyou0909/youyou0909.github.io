@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Hello World |
+    CADisplayLink小知识点获得FPS |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-CADisplayLink小知识点获得FPS" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      CADisplayLink小知识点获得FPS
     </h1>
   
 
@@ -40,7 +40,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/hello-world/" class="article-date">
+        <a href="/2019/01/10/CADisplayLink小知识点获得FPS/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -51,17 +51,12 @@
       
       
       
-        <blockquote>
-<p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！</p>
-</blockquote>
-<blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
-</blockquote>
+        <p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//CADisplayLink</span><br><span class="line">CADisplayLink * timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];</span><br><span class="line"></span><br><span class="line">[_link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)tick:(CADisplayLink *)link &#123;</span><br><span class="line">if (_lastTime == 0) &#123;//上一次屏幕刷新的时间</span><br><span class="line">_lastTime = link.timestamp;//屏幕刷新的时间戳</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_count++;//刷新次数</span><br><span class="line">NSTimeInterval delta = link.timestamp - _lastTime;//获得两次刷新的时间间隔</span><br><span class="line">if (delta &lt; 1) return;//间隔1秒</span><br><span class="line">_lastTime = link.timestamp;</span><br><span class="line">float fps = _count / delta;//fps = 次数/时间间隔</span><br><span class="line">_count = 0;//置零 重新计算</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/hello-world/" data-id="cjqrd1sfj000927lb75afjybw" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqrd1sf4000027lbk7et71ed" class="article-share-link">分享</a>
       
     </footer>
 
@@ -71,19 +66,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/UICollectionView系列四、自定义FlowLayout进行瀑布流布局/" class="article-nav-link">
+      <a href="/2019/01/11/saveToWallet/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            UICollectionView系列四、自定义FlowLayout进行瀑布流布局
+            (no title)
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/hello-world的副本/" class="article-nav-link">
+      <a href="/2019/01/10/Mac端口被占用解决办法/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">Mac端口被占用解决办法</div>
       </a>
     
   </nav>
