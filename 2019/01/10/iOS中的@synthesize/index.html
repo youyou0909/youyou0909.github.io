@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    CADisplayLink小知识点获得FPS |
+    iOS中的@synthesize |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-CADisplayLink小知识点获得FPS" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-iOS中的@synthesize" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      CADisplayLink小知识点获得FPS
+      iOS中的@synthesize
     </h1>
   
 
@@ -40,7 +40,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/CADisplayLink小知识点获得FPS/" class="article-date">
+        <a href="/2019/01/10/iOS中的@synthesize/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -51,12 +51,23 @@
       
       
       
-        <p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//CADisplayLink</span><br><span class="line">CADisplayLink * timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];</span><br><span class="line"></span><br><span class="line">[_link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)tick:(CADisplayLink *)link &#123;</span><br><span class="line">if (_lastTime == 0) &#123;//上一次屏幕刷新的时间</span><br><span class="line">_lastTime = link.timestamp;//屏幕刷新的时间戳</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_count++;//刷新次数</span><br><span class="line">NSTimeInterval delta = link.timestamp - _lastTime;//获得两次刷新的时间间隔</span><br><span class="line">if (delta &lt; 1) return;//间隔1秒</span><br><span class="line">_lastTime = link.timestamp;</span><br><span class="line">float fps = _count / delta;//fps = 次数/时间间隔</span><br><span class="line">_count = 0;//置零 重新计算</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>常见的有两种用法 其实是一个意思</p>
+<ul>
+<li><p>@synthesize student;   等价于 @synthesize student = student</p>
+</li>
+<li><p>@synthesize student = _student</p>
+</li>
+</ul>
+<p>ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的</p>
+<p>我们知道getter和setter方法里面操作的其实就是属性对应的成员变量 成员变量其实本质上就是一个变量指针</p>
+<p>那么调用两者有什么区别呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.name = @&quot;我信你个鬼&quot;;</span><br><span class="line">_name = @&quot;我信你个大头鬼&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>self.name本质上是调用的setter方法setName() 而setter方法是依赖于@property的属性修饰符的，比如retain，assign等属性。也就是会影响其引用计数</p>
+<p>而_name = @”我信你个大头鬼” 只是变量的赋值 不涉及retain、assign等</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/" data-id="cjqre2t5g00005ilb7a62bslt" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjqre2t64000c5ilbneerwy2w" class="article-share-link">分享</a>
       
     </footer>
 
@@ -66,19 +77,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/11/saveToWallet/" class="article-nav-link">
+      <a href="/2019/01/10/iOS 宏(define)与常量(const)以及extern/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            (no title)
+            iOS 宏(define)与常量(const)以及extern
           
         </div>
       </a>
     
     
-      <a href="/2019/01/10/Mac端口被占用解决办法/" class="article-nav-link">
+      <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">Mac端口被占用解决办法</div>
+        <div class="article-nav-title">iOS之创建一个常驻线程</div>
       </a>
     
   </nav>
