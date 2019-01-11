@@ -56,7 +56,7 @@
 
     
       
-        <article id="post-iOS保存图片到相册" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <article id="post-iOS之创建一个常驻线程" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -64,7 +64,7 @@
         
   
     <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/iOS保存图片到相册/">iOS保存图片到相册</a>
+      <a class="article-title" href="/2019/01/10/iOS之创建一个常驻线程/">iOS之创建一个常驻线程</a>
     </h2>
   
 
@@ -73,7 +73,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/iOS保存图片到相册/" class="article-date">
+        <a href="/2019/01/10/iOS之创建一个常驻线程/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -84,16 +84,15 @@
       
       
       
-        <p>需要导入系统框架</p>
-<p>#import &lt;Photos/Photos.h&gt;</p>
-<p>然后我们直接上代码</p>
+        <p>常驻线程有什么用呢？<br>让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。</p>
+<p>注意 ：不要使用GCD的global队列创建常驻线程<br>原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待</p>
         
-          <a class="article-more-link" href="/2019/01/10/iOS保存图片到相册/">阅读全文...</a>
+          <a class="article-more-link" href="/2019/01/10/iOS之创建一个常驻线程/">阅读全文...</a>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjqrpr4em000h04lbcs4u2q2u" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjqrpwgco000i2hlbdxr7gqhr" class="article-share-link">分享</a>
       
     </footer>
 
@@ -143,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrpr4em000i04lbc3man9qe" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjqrpwgcp000j2hlbn9kncypa" class="article-share-link">分享</a>
       
     </footer>
 
@@ -193,7 +192,55 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrpr4eo000k04lb4bz6h2sr" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjqrpwgcr000l2hlbiqvfht0s" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-解决Mac和iOS模拟器间拷贝粘贴的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/">解决Mac和iOS模拟器间拷贝粘贴的问题</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrpwgcr000m2hlbs8lpko1i" class="article-share-link">分享</a>
       
     </footer>
 
@@ -243,55 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrpr4eo000l04lb95f00bik" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-解决Mac和iOS模拟器间拷贝粘贴的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/">解决Mac和iOS模拟器间拷贝粘贴的问题</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjqrpr4ep000m04lbvfeydasv" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjqrpwgcs000n2hlbpgwrdqff" class="article-share-link">分享</a>
       
     </footer>
 
@@ -341,7 +340,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqrpr4f2000n04lbo6ob3ykn" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjqrpwgd6000o2hlbvj83f7yp" class="article-share-link">分享</a>
       
     </footer>
 

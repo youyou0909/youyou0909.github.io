@@ -46,14 +46,14 @@
     <content type="text"><![CDATA[常见的有两种用法 其实是一个意思 @synthesize student; 等价于 @synthesize student = student @synthesize student = _student ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的我们知道getter和setter方法里面操作的其实就是属性对应的成员变量 成员变量其实本质上就是一个变量指针 那么调用两者有什么区别呢？12self.name = @&quot;我信你个鬼&quot;;_name = @&quot;我信你个大头鬼&quot;; self.name本质上是调用的setter方法setName() 而setter方法是依赖于@property的属性修饰符的，比如retain，assign等属性。也就是会影响其引用计数 而_name = @”我信你个大头鬼” 只是变量的赋值 不涉及retain、assign等]]></content>
   </entry>
   <entry>
-    <title><![CDATA[iOS之创建一个常驻线程]]></title>
-    <url>%2F2019%2F01%2F10%2FiOS%E4%B9%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%A9%BB%E7%BA%BF%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[常驻线程有什么用呢？让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。 注意 ：不要使用GCD的global队列创建常驻线程原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待 状态，后面加进来的block就不会创建新的线程执行了 等待前面的任务执行完成，才会继续执行。如果线程池中的线程长时间不结束，后续堆积的任务会越来越多12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849@interface LongThreadDemoController ()@property (nonatomic, strong) NSThread *thread;@end@implementation LongThreadDemoController- (void)viewDidLoad &#123;[super viewDidLoad];self.view.backgroundColor = [UIColor whiteColor];self.title = @&quot;常驻线程Demo&quot;;&#125;- (void)threadRunloopPoint:(id)__unused object&#123;NSLog(@&quot;%@&quot;,NSStringFromSelector(_cmd));@autoreleasepool &#123;[[NSThread currentThread] setName:@&quot;changzhuThread&quot;];NSRunLoop *runLoop = [NSRunLoop currentRunLoop];//// 这里主要是监听某个 port，目的是让这个 Thread 不会回收[runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];[runLoop run];&#125;&#125;- (NSThread *)thread&#123;if(!_thread)&#123;_thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadRunloopPoint:) object:nil];[_thread start];&#125;return _thread;&#125;- (void)test&#123;NSLog(@&quot;%s&quot;,__func__);&#125;- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event&#123;[self performSelector:@selector(test) onThread:self.thread withObject:nil waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];&#125;]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[iOS保存图片到相册]]></title>
     <url>%2F2019%2F01%2F10%2FiOS%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87%E5%88%B0%E7%9B%B8%E5%86%8C%2F</url>
     <content type="text"><![CDATA[需要导入系统框架 #import &lt;Photos/Photos.h&gt; 然后我们直接上代码 123456789101112131415161718192021- (void)clickQRCode:(UIImage *)image&#123;[MBProgressHUD HUDForView:self.view];[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;[PHAssetChangeRequest creationRequestForAssetFromImage:image];&lt;!-- more --&gt;&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;NSLog(@&quot;success = %d, error = %@&quot;, success, error);dispatch_async(dispatch_get_main_queue(), ^&#123;[MBProgressHUD hideHUDForView:self.view];if (success) &#123;[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];&#125;else&#123;UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];[alert show];&#125;&#125;);&#125;];&#125;]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS之创建一个常驻线程]]></title>
+    <url>%2F2019%2F01%2F10%2FiOS%E4%B9%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%A9%BB%E7%BA%BF%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[常驻线程有什么用呢？让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。 注意 ：不要使用GCD的global队列创建常驻线程原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待 状态，后面加进来的block就不会创建新的线程执行了 等待前面的任务执行完成，才会继续执行。如果线程池中的线程长时间不结束，后续堆积的任务会越来越多12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849@interface LongThreadDemoController ()@property (nonatomic, strong) NSThread *thread;@end@implementation LongThreadDemoController- (void)viewDidLoad &#123;[super viewDidLoad];self.view.backgroundColor = [UIColor whiteColor];self.title = @&quot;常驻线程Demo&quot;;&#125;- (void)threadRunloopPoint:(id)__unused object&#123;NSLog(@&quot;%@&quot;,NSStringFromSelector(_cmd));@autoreleasepool &#123;[[NSThread currentThread] setName:@&quot;changzhuThread&quot;];NSRunLoop *runLoop = [NSRunLoop currentRunLoop];//// 这里主要是监听某个 port，目的是让这个 Thread 不会回收[runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];[runLoop run];&#125;&#125;- (NSThread *)thread&#123;if(!_thread)&#123;_thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadRunloopPoint:) object:nil];[_thread start];&#125;return _thread;&#125;- (void)test&#123;NSLog(@&quot;%s&quot;,__func__);&#125;- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event&#123;[self performSelector:@selector(test) onThread:self.thread withObject:nil waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];&#125;]]></content>
   </entry>
   <entry>
     <title><![CDATA[iOS图片拉伸]]></title>
@@ -66,14 +66,14 @@
     <content type="text"><![CDATA[注册和不注册的区别主要看下面这两个方法： 1234567- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; // Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); // newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered 如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册]]></content>
   </entry>
   <entry>
-    <title><![CDATA[代码修改xib约束的值注意]]></title>
-    <url>%2F2019%2F01%2F10%2F%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9xib%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%80%BC%E6%B3%A8%E6%84%8F%2F</url>
-    <content type="text"><![CDATA[有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 1234[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行- (void)modifyConstant&#123;self.topSafeH.constant += 100;&#125;]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[解决Mac和iOS模拟器间拷贝粘贴的问题]]></title>
     <url>%2F2019%2F01%2F10%2F%E8%A7%A3%E5%86%B3Mac%E5%92%8CiOS%E6%A8%A1%E6%8B%9F%E5%99%A8%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[代码修改xib约束的值注意]]></title>
+    <url>%2F2019%2F01%2F10%2F%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9xib%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%80%BC%E6%B3%A8%E6%84%8F%2F</url>
+    <content type="text"><![CDATA[有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 1234[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行- (void)modifyConstant&#123;self.topSafeH.constant += 100;&#125;]]></content>
   </entry>
   <entry>
     <title><![CDATA[NSOperation、NSOperationQueue]]></title>
