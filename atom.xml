@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-11T05:38:04.287Z</updated>
+  <updated>2019-01-23T02:49:45.478Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,146 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CGAffineTransform和CATransform3D原理</title>
+    <link href="http://yoursite.com/2019/01/23/17CGAffineTransform%E5%92%8CCATransform3D%E5%8E%9F%E7%90%86/"/>
+    <id>http://yoursite.com/2019/01/23/17CGAffineTransform和CATransform3D原理/</id>
+    <published>2019-01-23T02:49:28.100Z</published>
+    <updated>2019-01-23T02:49:45.478Z</updated>
+    
+    <content type="html"><![CDATA[<p>####简述<br>CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform<br>CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D</p><p>那么CGAffineTransform和CATransform3D的原理是什么呢？<br><a id="more"></a></p><p>###先来看CGAffineTransform<br>查看源码发现这是个结构体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct CGAffineTransform &#123;</span><br><span class="line">CGFloat a, b, c, d;</span><br><span class="line">CGFloat tx, ty;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>我们先来看下平移的方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理是什么呢？</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform which translates by `(tx, ty)&apos;:</span><br><span class="line">t&apos; = [ 1 0 0 1 tx ty ] */</span><br><span class="line"></span><br><span class="line">CG_EXTERN CGAffineTransform CGAffineTransformMakeTranslation(CGFloat tx,</span><br><span class="line">CGFloat ty) CG_AVAILABLE_STARTING(10.0, 2.0);</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">提示：</span><br><span class="line">为了把二维图形的变化统一在一个坐标系里，这里用到了齐次坐标的概</span><br><span class="line">念，即把一个二维图形用一个三维矩阵表示，其中第三列总是(0,0,1)，</span><br><span class="line">用来作为坐标系的标准。所以所有的变化都由前两列完成。</span><br></pre></td></tr></table></figure><p>那么，CGAffineTransform结构体中的参数用矩阵来表示，如下：</p><p>|a    b    0|</p><p>|c    d    0|</p><p>|tx   ty   1|</p><p>运算的原理：设原坐标为(X,Y,1),通过矩阵运算如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|a    b    0|</span><br><span class="line">[X,Y,1]      |c    d    0|   =   [aX + cY + tx   bX + dY + ty  1]</span><br><span class="line">|tx   ty   1|</span><br></pre></td></tr></table></figure></p><p>矩阵运算后的坐标[aX + cY + tx   bX + dY + ty  1]</p><p>我们将 t’ = [ 1 0 0 1 tx ty ]代入公式[aX + cY + tx   bX + dY + ty  1]中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[aX + cY + tx   bX + dY + ty  1] = [X + tx , Y + ty, 1]</span><br></pre></td></tr></table></figure></p><p>我们发现X坐标向左移动了tx,Y坐标向下移动了ty，这就是方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理</p><p>同样的道理，CGAffineTransform的所有方法的原理都是通过这种矩阵的运算，来实现坐标的变换的</p><p>###再来看看 CATransform3D<br>CATransform3D也是结构体，这里也是引入齐次坐标的概念，将三维图形的变化用四维矩阵来表示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct CATransform3D</span><br><span class="line">&#123;</span><br><span class="line">CGFloat m11, m12, m13, m14;</span><br><span class="line">CGFloat m21, m22, m23, m24;</span><br><span class="line">CGFloat m31, m32, m33, m34;</span><br><span class="line">CGFloat m41, m42, m43, m44;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>设原坐标为(X,Y,Z,1)，通过矩阵运算的到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[m11, m12, m13, m14]</span><br><span class="line"></span><br><span class="line">[m21, m22, m23, m24]</span><br><span class="line"></span><br><span class="line">[X,Y,Z,1]         [m31, m32, m33, m34]     =  [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</span><br><span class="line"></span><br><span class="line">[m41, m42, m43, m44]</span><br></pre></td></tr></table></figure></p><p>我们还是来看平移的方法CATransform3DMakeTranslation (CGFloat tx,<br>CGFloat ty, CGFloat tz)</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* Returns a transform that translates by &apos;(tx, ty, tz)&apos;:</span><br><span class="line">* t&apos; =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]. */</span><br><span class="line">CATransform3D CATransform3DMakeTranslation (CGFloat tx,</span><br><span class="line">CGFloat ty, CGFloat tz)</span><br></pre></td></tr></table></figure><p>把t’ =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]代入公式 [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</p><p>(X,Y,Z,1) = （X + tx,Y+ty,Z+tz,1）即X、Y、Z坐标的平移<br>CATransform3D其他方法的原理是类似的就不啰嗦了</p><p>####最后再附上CGAffineTransform和CATransform3D相互转化的API</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform with the same effect as affine transform &apos;m&apos;. */</span><br><span class="line">CATransform3D CATransform3DMakeAffineTransform (CGAffineTransform m)</span><br><span class="line"></span><br><span class="line">/* Returns the affine transform represented by &apos;t&apos;. If &apos;t&apos; can not be</span><br><span class="line">* represented exactly by an affine transform the returned value is</span><br><span class="line">* undefined. */</span><br><span class="line">CGAffineTransform CATransform3DGetAffineTransform (CATransform3D t)</span><br></pre></td></tr></table></figure><p>以上，懂了原理之后是不是感觉其实很简单的呢</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####简述&lt;br&gt;CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform&lt;br&gt;CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D&lt;/p&gt;
+&lt;p&gt;那么CGAffineTransform和CATransform3D的原理是什么呢？&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS 添加票据到wallet</title>
+    <link href="http://yoursite.com/2019/01/11/18saveToWallet/"/>
+    <id>http://yoursite.com/2019/01/11/18saveToWallet/</id>
+    <published>2019-01-11T00:58:15.239Z</published>
+    <updated>2019-01-11T06:50:52.465Z</updated>
+    
+    <content type="html"><![CDATA[<p>wallet的前身为passbook，2015年WWDC大会苹果正式改名wallet，passbook是苹果2012年iOS6开放出来的新功能.可以帮助用户管理五种类型（Boarding passes（登机牌），Coupons（优惠券），Store cards（购物卡），Event tickets（入场券），Generic（通用卡））的票据</p><a id="more"></a><p>在iOS中一个Pass其实就是一个.pkpass文件，事实上它是一个Zip压缩包，只是这个压缩包要按照一定的目录结构来设计<br>如何创建一个Pass可以参考Apple的文档<br><a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/YourFirst.html#//apple_ref/doc/uid/TP40012195-CH2-SW1" target="_blank" rel="noopener">https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/YourFirst.html#//apple_ref/doc/uid/TP40012195-CH2-SW1</a></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">-(void)addPassbookView:(NSData *)date&#123;</span><br><span class="line">    NSError *error = nil;</span><br><span class="line">    BOOL passEnbale = [PKPassLibrary isPassLibraryAvailable];//检查pass是否可用</span><br><span class="line">    if (![PKPassLibrary isPassLibraryAvailable]) &#123;//</span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            //[[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">            [[[UIAlertView alloc] initWithTitle:@&quot;Error&quot;</span><br><span class="line">                                        message:@&quot;PassKit not available&quot;</span><br><span class="line">                                       delegate:nil</span><br><span class="line">                              cancelButtonTitle:GDLocalizedString(@&quot;jpyd_ok&quot;)</span><br><span class="line">                              otherButtonTitles: nil] show];</span><br><span class="line">        &#125;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (passEnbale) &#123;</span><br><span class="line">        PKPass *onePass = [[PKPass alloc] initWithData:date error:&amp;error];</span><br><span class="line">        if (error) &#123;</span><br><span class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">               // [[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">                ZNLog(@&quot;!!!!!ERROR:%@&quot;,[error description]);</span><br><span class="line">                </span><br><span class="line">                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:GDLocalizedString(@&quot;jpyd_Friendlyreminder&quot;) message:GDLocalizedString(@&quot;sy_onePass&quot;) delegate:nil cancelButtonTitle:GDLocalizedString(@&quot;jpyd_ok&quot;) otherButtonTitles:nil, nil];</span><br><span class="line">                [alert show];</span><br><span class="line">                [alert release];</span><br><span class="line">            &#125;);</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            PKAddPassesViewController *passAddViewController = [[[PKAddPassesViewController alloc] initWithPass:onePass]autorelease];</span><br><span class="line">            passAddViewController.delegate = self;</span><br><span class="line">            ChinaEastViewController *app = [ChinaEastViewController sharedBankcommViewController];</span><br><span class="line">            //Application tried to present a nil modal view controller on target .修改听云，李良</span><br><span class="line">            if (passAddViewController) &#123;</span><br><span class="line">                [app presentViewController:passAddViewController animated:YES completion:^&#123;</span><br><span class="line">                   // [[WaitDialogFullS sharedWaitDialog] endLoading];</span><br><span class="line">                &#125;];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;wallet的前身为passbook，2015年WWDC大会苹果正式改名wallet，passbook是苹果2012年iOS6开放出来的新功能.可以帮助用户管理五种类型（Boarding passes（登机牌），Coupons（优惠券），Store cards（购物卡），Event tickets（入场券），Generic（通用卡））的票据&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS中的@synthesize</title>
+    <link href="http://yoursite.com/2019/01/10/11iOS%E4%B8%AD%E7%9A%84@synthesize/"/>
+    <id>http://yoursite.com/2019/01/10/11iOS中的@synthesize/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:34:05.457Z</updated>
+    
+    <content type="html"><![CDATA[<p>常见的有两种用法 其实是一个意思</p><ul><li><p>@synthesize student;   等价于 @synthesize student = student</p></li><li><p>@synthesize student = _student</p></li></ul><p>ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的<br><a id="more"></a><br>我们知道getter和setter方法里面操作的其实就是属性对应的成员变量 成员变量其实本质上就是一个变量指针</p><p>那么调用两者有什么区别呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.name = @&quot;我信你个鬼&quot;;</span><br><span class="line">_name = @&quot;我信你个大头鬼&quot;;</span><br></pre></td></tr></table></figure></p><p>self.name本质上是调用的setter方法setName() 而setter方法是依赖于@property的属性修饰符的，比如retain，assign等属性。也就是会影响其引用计数</p><p>而_name = @”我信你个大头鬼” 只是变量的赋值 不涉及retain、assign等</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;常见的有两种用法 其实是一个意思&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;@synthesize student;   等价于 @synthesize student = student&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;@synthesize student = _student&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Mac端口被占用解决办法</title>
+    <link href="http://yoursite.com/2019/01/10/12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/12Mac端口被占用解决办法/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T01:10:56.376Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL</p><p>2、使用kill -9 + pid </p><p>3、重启xcode</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL&lt;/p&gt;
+&lt;p&gt;2、使用kill -9 + pid &lt;/p&gt;
+&lt;p&gt;3、重启xcode&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Swift  String和NSDate的相互转化</title>
+    <link href="http://yoursite.com/2019/01/10/14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
+    <id>http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:50:52.422Z</updated>
+    
+    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>tableviewcell注册和不注册的区别及用法</title>
+    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.984Z</updated>
+    
+    <content type="html"><![CDATA[<p>注册和不注册的区别主要看下面这两个方法：</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;注册和不注册的区别主要看下面这两个方法：&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>TCP与UDP区别</title>
+    <link href="http://yoursite.com/2019/01/10/16TCP%E4%B8%8EUDP%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2019/01/10/16TCP与UDP区别/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:41.151Z</updated>
+    
+    <content type="html"><![CDATA[<p>TCP与UDP区别总结：<br>1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接<br>2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付</p><a id="more"></a><p>3、TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的<br>UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低（对实时应用很有用，如IP电话，实时视频会议等）<br>4、每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信<br>5、TCP首部开销20字节;UDP的首部开销小，只有8个字节<br>6、TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道</p><p>UDP补充：<br>UDP不提供复杂的控制机制，利用IP提供面向无连接的通信服务。并且它是将应用程序发来的数据在收到的那一刻，立刻按照原样发送到网络上的一种机制。即使是出现网络拥堵的情况下，UDP也无法进行流量控制等避免网络拥塞的行为。此外，传输途中如果出现了丢包，UDO也不负责重发。甚至当出现包的到达顺序乱掉时也没有纠正的功能。如果需要这些细节控制，那么不得不交给由采用UDO的应用程序去处理。换句话说，UDP将部分控制转移到应用程序去处理，自己却只提供作为传输层协议的最基本功能。UDP有点类似于用户说什么听什么的机制，但是需要用户充分考虑好上层协议类型并制作相应的应用程序。</p><p>TCP补充：<br>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;TCP与UDP区别总结：&lt;br&gt;1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接&lt;br&gt;2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

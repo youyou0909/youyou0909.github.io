@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Hello World |
+    Swift  String和NSDate的相互转化 |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-1hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-14Swift  String和NSDate的相互转化" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      Swift  String和NSDate的相互转化
     </h1>
   
 
@@ -40,7 +40,7 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/1hello-world/" class="article-date">
+        <a href="/2019/01/10/14Swift  String和NSDate的相互转化/" class="article-date">
   <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
 </a>
         
@@ -49,32 +49,45 @@
 
     <div class="article-entry" itemprop="articleBody">
       
-  <div class="article-albums">
-    <ul class="article-albums-photos">
       
-        <li class="article-albums-item">
-          <a class="article-albums-img fancybox" data-fancybox="images" data-caption="" href="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" rel="gallery_cjr8lue42000g1rlbe07cmjmf" title="">
-            <img class="lazy" data-original="https://upload-images.jianshu.io/upload_images/4055583-1ac0dc0ea95a5181.gif?imageMogr2/auto-orient/strip" itemprop="image" alt="">
-          </a>
-          
-            <span class="article-albums-caption">    </span>
-          
-        </li>
       
-    </ul>
-  </div>
+        <p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p>
+<a id="more"></a>
+<p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p>
+<p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p>
+<p>####2.NSDate 转化成 String</p>
+<p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p>
+<pre><code>####3.由日期判断是星期几
+        扩展 NSDate,写一个方法
+        extension NSDate{
 
-      
-      
-        <blockquote>
-<p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p>
-</blockquote>
-<p> 我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
 
+            func resultWeek()-&gt;Int{
+                 let interval = self.timeIntervalSince1970
+                         let day = Int(interval/86400)
+                                return (day-3)%7
+                                     }
+                                     }
+                                     上面的&quot;20161224191234&quot;判断一下是周几
+                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]
+                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六
+
+                                     ####4.判断两个日期时间差
+
+                                     let firstDate = &quot;2016-09-24&quot;
+                                     let secondDate = &quot;2016-12-24&quot;
+                                     let cformatter = NSDateFormatter()
+                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;
+                                     let sDate = cformatter.dateFromString(firstDate)
+                                     let cDate = cformatter.dateFromString(secondDate)
+                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)
+                                     let day_seconds = 24*3600 //一天的秒数
+                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)
+</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/1hello-world/" data-id="cjr8lue42000g1rlbe07cmjmf" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/" data-id="cjr8lue3x000b1rlbebkruhqo" class="article-share-link">分享</a>
       
     </footer>
 
@@ -84,15 +97,20 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/16TCP与UDP区别/" class="article-nav-link">
+      <a href="/2019/01/10/12Mac端口被占用解决办法/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            TCP与UDP区别
+            Mac端口被占用解决办法
           
         </div>
       </a>
     
+    
+      <a href="/2019/01/10/15tableviewcell注册和不注册的区别及用法/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">tableviewcell注册和不注册的区别及用法</div>
+      </a>
     
   </nav>
 
