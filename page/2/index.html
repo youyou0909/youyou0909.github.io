@@ -56,63 +56,6 @@
 
     
       
-        <article id="post-iOS中的@synthesize" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/iOS中的@synthesize/">iOS中的@synthesize</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/iOS中的@synthesize/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>常见的有两种用法 其实是一个意思</p>
-<ul>
-<li><p>@synthesize student;   等价于 @synthesize student = student</p>
-</li>
-<li><p>@synthesize student = _student</p>
-</li>
-</ul>
-<p>ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的<br>
-        
-          <a class="article-more-link" href="/2019/01/10/iOS中的@synthesize/">阅读全文...</a>
-        
-      
-    </p></div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS中的@synthesize/" data-id="cjr8l70yy000gxtlb6a9vq3xo" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
         <article id="post-iOS之创建一个常驻线程" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
@@ -149,7 +92,59 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjr8l70yz000hxtlbqhobbghb" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/" data-id="cjr8l7jfu000hy9lb2o2g1wp2" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iOS保存图片到相册" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/iOS保存图片到相册/">iOS保存图片到相册</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/iOS保存图片到相册/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>需要导入系统框架</p>
+<p>#import &lt;Photos/Photos.h&gt;</p>
+<p>然后我们直接上代码</p>
+        
+          <a class="article-more-link" href="/2019/01/10/iOS保存图片到相册/">阅读全文...</a>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/iOS保存图片到相册/" data-id="cjr8l7jfv000iy9lbjcaoeiax" class="article-share-link">分享</a>
       
     </footer>
 
@@ -199,55 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjr8l70yz000ixtlb8jbrykw2" class="article-share-link">分享</a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-解决Mac和iOS模拟器间拷贝粘贴的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/">解决Mac和iOS模拟器间拷贝粘贴的问题</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjr8l70z0000jxtlbv3oic70s" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/iOS图片拉伸/" data-id="cjr8l7jfv000jy9lb3pg4j39l" class="article-share-link">分享</a>
       
     </footer>
 
@@ -297,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjr8l70z1000lxtlbhlxrdlxv" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/" data-id="cjr8l7jfw000ly9lbv3fn5ux3" class="article-share-link">分享</a>
       
     </footer>
 
@@ -347,7 +294,55 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjr8l70z2000mxtlbdwx7r03i" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/代码修改xib约束的值注意/" data-id="cjr8l7jfx000my9lbfr863owp" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-解决Mac和iOS模拟器间拷贝粘贴的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/">解决Mac和iOS模拟器间拷贝粘贴的问题</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-date">
+  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/" data-id="cjr8l7jfy000ny9lbcp6kr8ti" class="article-share-link">分享</a>
       
     </footer>
 
@@ -397,7 +392,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjr8l70zg000nxtlbvm61kndz" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/" data-id="cjr8l7jgc000oy9lbux1cofl5" class="article-share-link">分享</a>
       
     </footer>
 
