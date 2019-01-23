@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    代码修改xib约束的值注意 |
+    iOS图片拉伸 |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-3代码修改xib约束的值注意" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-9iOS图片拉伸" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      代码修改xib约束的值注意
+      iOS图片拉伸
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/23/3代码修改xib约束的值注意/" class="article-date">
-  <time datetime="2019-01-23T03:08:24.736Z" itemprop="datePublished">2019-01-23</time>
+        <a href="/2019/01/23/9iOS图片拉伸/" class="article-date">
+  <time datetime="2019-01-23T03:12:00.606Z" itemprop="datePublished">2019-01-23</time>
 </a>
         
       </div>
@@ -51,14 +51,14 @@
       
       
       
-        <p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line"></span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/23/3代码修改xib约束的值注意/" data-id="cjr8m5pcs000j76lbou6b0chg" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/23/9iOS图片拉伸/" data-id="cjr8m5pcw000o76lbsbfmq0mj" class="article-share-link">分享</a>
       
     </footer>
 
@@ -68,19 +68,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/23/4解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-nav-link">
+      <a href="/2019/01/23/10iOS之创建一个常驻线程/" class="article-nav-link">
         <strong class="article-nav-caption">前一篇</strong>
         <div class="article-nav-title">
           
-            解决Mac和iOS模拟器间拷贝粘贴的问题
+            iOS之创建一个常驻线程
           
         </div>
       </a>
     
     
-      <a href="/2019/01/23/2__bridge，__bridge_transfer和__bridge_retained/" class="article-nav-link">
+      <a href="/2019/01/23/7iOS 协议中定义属性/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">__bridge，__bridge_transfer和__bridge_retained</div>
+        <div class="article-nav-title">iOS 协议中定义属性</div>
       </a>
     
   </nav>
