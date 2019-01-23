@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-23T02:49:45.478Z</updated>
+  <updated>2019-01-23T03:08:55.133Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,63 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决Mac和iOS模拟器间拷贝粘贴的问题</title>
+    <link href="http://yoursite.com/2019/01/23/4%E8%A7%A3%E5%86%B3Mac%E5%92%8CiOS%E6%A8%A1%E6%8B%9F%E5%99%A8%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2019/01/23/4解决Mac和iOS模拟器间拷贝粘贴的问题/</id>
+    <published>2019-01-23T03:08:44.386Z</published>
+    <updated>2019-01-23T03:08:55.133Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;1、检查模拟器的Edit &amp;gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试&lt;br&gt;2、按照上述操作还不行的,注意 HardWare =&amp;gt; keyboard =&amp;gt; send menu keyboard … 
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>代码修改xib约束的值注意</title>
+    <link href="http://yoursite.com/2019/01/23/3%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9xib%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%80%BC%E6%B3%A8%E6%84%8F/"/>
+    <id>http://yoursite.com/2019/01/23/3代码修改xib约束的值注意/</id>
+    <published>2019-01-23T03:08:24.736Z</published>
+    <updated>2019-01-23T03:08:33.461Z</updated>
+    
+    <content type="html"><![CDATA[<p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 &lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>__bridge，__bridge_transfer和__bridge_retained</title>
+    <link href="http://yoursite.com/2019/01/23/2__bridge%EF%BC%8C__bridge_transfer%E5%92%8C__bridge_retained/"/>
+    <id>http://yoursite.com/2019/01/23/2__bridge，__bridge_transfer和__bridge_retained/</id>
+    <published>2019-01-23T03:07:42.139Z</published>
+    <updated>2019-01-23T03:08:00.250Z</updated>
+    
+    <content type="html"><![CDATA[<p>####引言<br>Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。<br>Core Foundation框架和Foundation框架紧密相关，它们为相同功能提供接口，但Foundation框架提供Objective-C接口。<br>在开发iOS应用程序时我们有时会用到Core Foundation对象，下面简称CF。<br><a id="more"></a><br>例如Core Graphics、Core Text，并且我们可能需要将CF对象和OC对象进行相互转化，我们知道，ARC环境下，编译器不会自动管理CF对象的内存，我们需要手动管理。这就是说我们在创建一个CF对象以后需要我们使用CFRelease将其手动释放。</p><p>那么CF和OC相互转化的时候该如何管理内存呢？<br>我们可以通过<strong>bridge,</strong>bridge_transfer,__bridge_retained 来进行内存管理，其是ARC下OC对象和Core Foundation对象之间的桥梁</p><p>####1、__bridge<br>CF和OC对象转化时只涉及对象类型不涉及对象所有权的转化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//Image I/O 从 NSBundle 读取图片数据</span><br><span class="line">NSString *imagePath = [[NSBundle mainBundle] pathForResource:@&quot;image&quot; ofType:@&quot;png&quot;];</span><br><span class="line">CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:</span><br><span class="line">[[NSBundle mainBundle] pathForResource:@&quot;image&quot; ofType:@&quot;png&quot;]], NULL);</span><br><span class="line"></span><br><span class="line">OC对象转CF对象，只是转化类型，不涉及对象所有权</span><br></pre></td></tr></table></figure></p><p>####2、__bridge_transfer<br>常用在CF对象转化成OC对象时，将CF对象的所有权交给OC对象，此时ARC就能自动管理该内存,作用同CFBridgingRelease()</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//    __bridge_transfer  将CF对象的所有权（内存）交给OC对象，相当于CF对象执行了release，此时ARC就能自动管理该内存(OC对象由ARC管理内存)</span><br><span class="line">NSArray *ifs = (__bridge_transfer NSArray *)CNCopySupportedInterfaces();</span><br></pre></td></tr></table></figure><p>####3、<strong>bridge_retained</strong>bridge_retained与__bridge_transfer 相反，常用在将OC对象转化成CF对象，且OC对象的所有权也交给CF对象来管理。相当于对CF对象执行了retain操作，而OC对象本身的内存会由ARC来自动回收<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id obj = [[NSObject alloc] init];</span><br><span class="line">void *p = (__bridge_retained void *)obj;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####引言&lt;br&gt;Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。&lt;br&gt;Core Foundation框架和Foundation框架紧密相关，它们为相同功能提供接口，但Foundation框架提供Objective-C接口。&lt;br&gt;在开发iOS应用程序时我们有时会用到Core Foundation对象，下面简称CF。&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>CGAffineTransform和CATransform3D原理</title>
