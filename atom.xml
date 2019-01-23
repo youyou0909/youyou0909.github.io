@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-11T06:50:52.465Z</updated>
+  <updated>2019-01-23T02:49:45.478Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,9 +17,28 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>CGAffineTransform和CATransform3D原理</title>
+    <link href="http://yoursite.com/2019/01/23/17CGAffineTransform%E5%92%8CCATransform3D%E5%8E%9F%E7%90%86/"/>
+    <id>http://yoursite.com/2019/01/23/17CGAffineTransform和CATransform3D原理/</id>
+    <published>2019-01-23T02:49:28.100Z</published>
+    <updated>2019-01-23T02:49:45.478Z</updated>
+    
+    <content type="html"><![CDATA[<p>####简述<br>CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform<br>CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D</p><p>那么CGAffineTransform和CATransform3D的原理是什么呢？<br><a id="more"></a></p><p>###先来看CGAffineTransform<br>查看源码发现这是个结构体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct CGAffineTransform &#123;</span><br><span class="line">CGFloat a, b, c, d;</span><br><span class="line">CGFloat tx, ty;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>我们先来看下平移的方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理是什么呢？</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform which translates by `(tx, ty)&apos;:</span><br><span class="line">t&apos; = [ 1 0 0 1 tx ty ] */</span><br><span class="line"></span><br><span class="line">CG_EXTERN CGAffineTransform CGAffineTransformMakeTranslation(CGFloat tx,</span><br><span class="line">CGFloat ty) CG_AVAILABLE_STARTING(10.0, 2.0);</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">提示：</span><br><span class="line">为了把二维图形的变化统一在一个坐标系里，这里用到了齐次坐标的概</span><br><span class="line">念，即把一个二维图形用一个三维矩阵表示，其中第三列总是(0,0,1)，</span><br><span class="line">用来作为坐标系的标准。所以所有的变化都由前两列完成。</span><br></pre></td></tr></table></figure><p>那么，CGAffineTransform结构体中的参数用矩阵来表示，如下：</p><p>|a    b    0|</p><p>|c    d    0|</p><p>|tx   ty   1|</p><p>运算的原理：设原坐标为(X,Y,1),通过矩阵运算如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|a    b    0|</span><br><span class="line">[X,Y,1]      |c    d    0|   =   [aX + cY + tx   bX + dY + ty  1]</span><br><span class="line">|tx   ty   1|</span><br></pre></td></tr></table></figure></p><p>矩阵运算后的坐标[aX + cY + tx   bX + dY + ty  1]</p><p>我们将 t’ = [ 1 0 0 1 tx ty ]代入公式[aX + cY + tx   bX + dY + ty  1]中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[aX + cY + tx   bX + dY + ty  1] = [X + tx , Y + ty, 1]</span><br></pre></td></tr></table></figure></p><p>我们发现X坐标向左移动了tx,Y坐标向下移动了ty，这就是方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理</p><p>同样的道理，CGAffineTransform的所有方法的原理都是通过这种矩阵的运算，来实现坐标的变换的</p><p>###再来看看 CATransform3D<br>CATransform3D也是结构体，这里也是引入齐次坐标的概念，将三维图形的变化用四维矩阵来表示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct CATransform3D</span><br><span class="line">&#123;</span><br><span class="line">CGFloat m11, m12, m13, m14;</span><br><span class="line">CGFloat m21, m22, m23, m24;</span><br><span class="line">CGFloat m31, m32, m33, m34;</span><br><span class="line">CGFloat m41, m42, m43, m44;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>设原坐标为(X,Y,Z,1)，通过矩阵运算的到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[m11, m12, m13, m14]</span><br><span class="line"></span><br><span class="line">[m21, m22, m23, m24]</span><br><span class="line"></span><br><span class="line">[X,Y,Z,1]         [m31, m32, m33, m34]     =  [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</span><br><span class="line"></span><br><span class="line">[m41, m42, m43, m44]</span><br></pre></td></tr></table></figure></p><p>我们还是来看平移的方法CATransform3DMakeTranslation (CGFloat tx,<br>CGFloat ty, CGFloat tz)</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* Returns a transform that translates by &apos;(tx, ty, tz)&apos;:</span><br><span class="line">* t&apos; =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]. */</span><br><span class="line">CATransform3D CATransform3DMakeTranslation (CGFloat tx,</span><br><span class="line">CGFloat ty, CGFloat tz)</span><br></pre></td></tr></table></figure><p>把t’ =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]代入公式 [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</p><p>(X,Y,Z,1) = （X + tx,Y+ty,Z+tz,1）即X、Y、Z坐标的平移<br>CATransform3D其他方法的原理是类似的就不啰嗦了</p><p>####最后再附上CGAffineTransform和CATransform3D相互转化的API</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform with the same effect as affine transform &apos;m&apos;. */</span><br><span class="line">CATransform3D CATransform3DMakeAffineTransform (CGAffineTransform m)</span><br><span class="line"></span><br><span class="line">/* Returns the affine transform represented by &apos;t&apos;. If &apos;t&apos; can not be</span><br><span class="line">* represented exactly by an affine transform the returned value is</span><br><span class="line">* undefined. */</span><br><span class="line">CGAffineTransform CATransform3DGetAffineTransform (CATransform3D t)</span><br></pre></td></tr></table></figure><p>以上，懂了原理之后是不是感觉其实很简单的呢</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####简述&lt;br&gt;CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform&lt;br&gt;CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D&lt;/p&gt;
+&lt;p&gt;那么CGAffineTransform和CATransform3D的原理是什么呢？&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>iOS 添加票据到wallet</title>
-    <link href="http://yoursite.com/2019/01/11/saveToWallet/"/>
-    <id>http://yoursite.com/2019/01/11/saveToWallet/</id>
+    <link href="http://yoursite.com/2019/01/11/18saveToWallet/"/>
+    <id>http://yoursite.com/2019/01/11/18saveToWallet/</id>
     <published>2019-01-11T00:58:15.239Z</published>
     <updated>2019-01-11T06:50:52.465Z</updated>
     
@@ -35,36 +54,18 @@
   </entry>
   
   <entry>
-    <title>CADisplayLink小知识点获得FPS</title>
-    <link href="http://yoursite.com/2019/01/10/CADisplayLink%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9%E8%8E%B7%E5%BE%97FPS/"/>
-    <id>http://yoursite.com/2019/01/10/CADisplayLink小知识点获得FPS/</id>
+    <title>iOS之创建一个常驻线程</title>
+    <link href="http://yoursite.com/2019/01/10/10iOS%E4%B9%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%A9%BB%E7%BA%BF%E7%A8%8B/"/>
+    <id>http://yoursite.com/2019/01/10/10iOS之创建一个常驻线程/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.997Z</updated>
+    <updated>2019-01-11T06:50:52.460Z</updated>
     
-    <content type="html"><![CDATA[<p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//CADisplayLink</span><br><span class="line">CADisplayLink * timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];</span><br><span class="line"></span><br><span class="line">[_link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line">- (void)tick:(CADisplayLink *)link &#123;</span><br><span class="line">if (_lastTime == 0) &#123;//上一次屏幕刷新的时间</span><br><span class="line">_lastTime = link.timestamp;//屏幕刷新的时间戳</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_count++;//刷新次数</span><br><span class="line">NSTimeInterval delta = link.timestamp - _lastTime;//获得两次刷新的时间间隔</span><br><span class="line">if (delta &lt; 1) return;//间隔1秒</span><br><span class="line">_lastTime = link.timestamp;</span><br><span class="line">float fps = _count / delta;//fps = 次数/时间间隔</span><br><span class="line">_count = 0;//置零 重新计算</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>常驻线程有什么用呢？<br>让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。</p><p>注意 ：不要使用GCD的global队列创建常驻线程<br>原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待</p><a id="more"></a><p>状态，后面加进来的block就不会创建新的线程执行了 等待前面的任务执行完成，才会继续执行。如果线程池中的线程长时间不结束，后续堆积的任务会越来越多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">@interface LongThreadDemoController ()</span><br><span class="line">@property (nonatomic, strong) NSThread *thread;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LongThreadDemoController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">self.view.backgroundColor = [UIColor whiteColor];</span><br><span class="line">self.title = @&quot;常驻线程Demo&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)threadRunloopPoint:(id)__unused object&#123;</span><br><span class="line">NSLog(@&quot;%@&quot;,NSStringFromSelector(_cmd));</span><br><span class="line">@autoreleasepool &#123;</span><br><span class="line">[[NSThread currentThread] setName:@&quot;changzhuThread&quot;];</span><br><span class="line">NSRunLoop *runLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">//// 这里主要是监听某个 port，目的是让这个 Thread 不会回收</span><br><span class="line">[runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];</span><br><span class="line">[runLoop run];</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (NSThread *)thread&#123;</span><br><span class="line"></span><br><span class="line">if(!_thread)&#123;</span><br><span class="line">_thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadRunloopPoint:) object:nil];</span><br><span class="line">[_thread start];</span><br><span class="line">&#125;</span><br><span class="line">return _thread;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)test&#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[self performSelector:@selector(test) onThread:self.thread withObject:nil waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>CGAffineTransform和CATransform3D原理</title>
-    <link href="http://yoursite.com/2019/01/10/CGAffineTransform%E5%92%8CCATransform3D%E5%8E%9F%E7%90%86/"/>
-    <id>http://yoursite.com/2019/01/10/CGAffineTransform和CATransform3D原理/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-23T02:45:08.022Z</updated>
-    
-    <content type="html"><![CDATA[<p>####简述<br>CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform<br>CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D</p><p>那么CGAffineTransform和CATransform3D的原理是什么呢？<br><a id="more"></a></p><p>###先来看CGAffineTransform<br>查看源码发现这是个结构体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct CGAffineTransform &#123;</span><br><span class="line">CGFloat a, b, c, d;</span><br><span class="line">CGFloat tx, ty;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>我们先来看下平移的方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理是什么呢？</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform which translates by `(tx, ty)&apos;:</span><br><span class="line">t&apos; = [ 1 0 0 1 tx ty ] */</span><br><span class="line"></span><br><span class="line">CG_EXTERN CGAffineTransform CGAffineTransformMakeTranslation(CGFloat tx,</span><br><span class="line">CGFloat ty) CG_AVAILABLE_STARTING(10.0, 2.0);</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">提示：</span><br><span class="line">为了把二维图形的变化统一在一个坐标系里，这里用到了齐次坐标的概</span><br><span class="line">念，即把一个二维图形用一个三维矩阵表示，其中第三列总是(0,0,1)，</span><br><span class="line">用来作为坐标系的标准。所以所有的变化都由前两列完成。</span><br></pre></td></tr></table></figure><p>那么，CGAffineTransform结构体中的参数用矩阵来表示，如下：</p><p>|a    b    0|</p><p>|c    d    0|</p><p>|tx   ty   1|</p><p>运算的原理：设原坐标为(X,Y,1),通过矩阵运算如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|a    b    0|</span><br><span class="line">[X,Y,1]      |c    d    0|   =   [aX + cY + tx   bX + dY + ty  1] </span><br><span class="line">|tx   ty   1|</span><br></pre></td></tr></table></figure></p><p>矩阵运算后的坐标[aX + cY + tx   bX + dY + ty  1]</p><p>我们将 t’ = [ 1 0 0 1 tx ty ]代入公式[aX + cY + tx   bX + dY + ty  1]中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[aX + cY + tx   bX + dY + ty  1] = [X + tx , Y + ty, 1]</span><br></pre></td></tr></table></figure></p><p>我们发现X坐标向左移动了tx,Y坐标向下移动了ty，这就是方法CGAffineTransformMakeTranslation(CGFloat tx,<br>CGFloat ty)的原理 </p><p>同样的道理，CGAffineTransform的所有方法的原理都是通过这种矩阵的运算，来实现坐标的变换的</p><p>###再来看看 CATransform3D<br>CATransform3D也是结构体，这里也是引入齐次坐标的概念，将三维图形的变化用四维矩阵来表示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct CATransform3D</span><br><span class="line">&#123;</span><br><span class="line">CGFloat m11, m12, m13, m14;</span><br><span class="line">CGFloat m21, m22, m23, m24;</span><br><span class="line">CGFloat m31, m32, m33, m34;</span><br><span class="line">CGFloat m41, m42, m43, m44;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>设原坐标为(X,Y,Z,1)，通过矩阵运算的到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[m11, m12, m13, m14]</span><br><span class="line"></span><br><span class="line">[m21, m22, m23, m24]</span><br><span class="line"></span><br><span class="line">[X,Y,Z,1]         [m31, m32, m33, m34]     =  [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</span><br><span class="line"></span><br><span class="line">[m41, m42, m43, m44]</span><br></pre></td></tr></table></figure></p><p>我们还是来看平移的方法CATransform3DMakeTranslation (CGFloat tx,<br>CGFloat ty, CGFloat tz)  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* Returns a transform that translates by &apos;(tx, ty, tz)&apos;:</span><br><span class="line">* t&apos; =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]. */  </span><br><span class="line">CATransform3D CATransform3DMakeTranslation (CGFloat tx,</span><br><span class="line">CGFloat ty, CGFloat tz)</span><br></pre></td></tr></table></figure><p>把t’ =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]代入公式 [m11X+ m21Y + m31Z + m41,m12X+m22Y+m32Z+m42,m13X+m23Y+m33Z+m43,m14+m24+m34+m44];</p><p>(X,Y,Z,1) = （X + tx,Y+ty,Z+tz,1）即X、Y、Z坐标的平移<br>CATransform3D其他方法的原理是类似的就不啰嗦了</p><p>####最后再附上CGAffineTransform和CATransform3D相互转化的API</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* Return a transform with the same effect as affine transform &apos;m&apos;. */</span><br><span class="line">CATransform3D CATransform3DMakeAffineTransform (CGAffineTransform m)  </span><br><span class="line"></span><br><span class="line">/* Returns the affine transform represented by &apos;t&apos;. If &apos;t&apos; can not be</span><br><span class="line">* represented exactly by an affine transform the returned value is</span><br><span class="line">* undefined. */  </span><br><span class="line">CGAffineTransform CATransform3DGetAffineTransform (CATransform3D t)</span><br></pre></td></tr></table></figure><p>以上，懂了原理之后是不是感觉其实很简单的呢</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;####简述&lt;br&gt;CGAffineTransform是用来做View层2D的形变的，UIView有个属性transform的类型就是CGAffineTransform&lt;br&gt;CATransform3D是用来做layer层3D的形变的，CALayer也有个属性transform的类型就是CATransform3D&lt;/p&gt;
-&lt;p&gt;那么CGAffineTransform和CATransform3D的原理是什么呢？&lt;br&gt;
+      &lt;p&gt;常驻线程有什么用呢？&lt;br&gt;让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。&lt;/p&gt;
+&lt;p&gt;注意 ：不要使用GCD的global队列创建常驻线程&lt;br&gt;原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待&lt;/p&gt;
     
     </summary>
     
@@ -73,8 +74,8 @@
   
   <entry>
     <title>Mac端口被占用解决办法</title>
-    <link href="http://yoursite.com/2019/01/10/Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
-    <id>http://yoursite.com/2019/01/10/Mac端口被占用解决办法/</id>
+    <link href="http://yoursite.com/2019/01/10/12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/12Mac端口被占用解决办法/</id>
     <published>2019-01-10T02:30:28.042Z</published>
     <updated>2019-01-11T01:10:56.376Z</updated>
     
@@ -96,104 +97,9 @@
   </entry>
   
   <entry>
-    <title>Swift  String和NSDate的相互转化</title>
-    <link href="http://yoursite.com/2019/01/10/Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
-    <id>http://yoursite.com/2019/01/10/Swift  String和NSDate的相互转化/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:50:52.422Z</updated>
-    
-    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>TCP与UDP区别</title>
-    <link href="http://yoursite.com/2019/01/10/TCP%E4%B8%8EUDP%E5%8C%BA%E5%88%AB/"/>
-    <id>http://yoursite.com/2019/01/10/TCP与UDP区别/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:41.151Z</updated>
-    
-    <content type="html"><![CDATA[<p>TCP与UDP区别总结：<br>1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接<br>2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付</p><a id="more"></a><p>3、TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的<br>UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低（对实时应用很有用，如IP电话，实时视频会议等）<br>4、每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信<br>5、TCP首部开销20字节;UDP的首部开销小，只有8个字节<br>6、TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道</p><p>UDP补充：<br>UDP不提供复杂的控制机制，利用IP提供面向无连接的通信服务。并且它是将应用程序发来的数据在收到的那一刻，立刻按照原样发送到网络上的一种机制。即使是出现网络拥堵的情况下，UDP也无法进行流量控制等避免网络拥塞的行为。此外，传输途中如果出现了丢包，UDO也不负责重发。甚至当出现包的到达顺序乱掉时也没有纠正的功能。如果需要这些细节控制，那么不得不交给由采用UDO的应用程序去处理。换句话说，UDP将部分控制转移到应用程序去处理，自己却只提供作为传输层协议的最基本功能。UDP有点类似于用户说什么听什么的机制，但是需要用户充分考虑好上层协议类型并制作相应的应用程序。</p><p>TCP补充：<br>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;TCP与UDP区别总结：&lt;br&gt;1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接&lt;br&gt;2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2019/01/10/hello-world/"/>
-    <id>http://yoursite.com/2019/01/10/hello-world/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T05:38:04.287Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p></blockquote><p> 我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！&lt;br&gt;以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。&lt;/p&gt;
-&lt;/blockq
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS 协议中定义属性</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%20%E5%8D%8F%E8%AE%AE%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7/"/>
-    <id>http://yoursite.com/2019/01/10/iOS 协议中定义属性/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T07:00:37.693Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure><a id="more"></a><p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p><p>所以就无法调用getter或者setter 否则项目崩溃</p><p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p><p>来看看实例吧：</p><p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p><p>.m</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;@protocol CETableViewModelProtocol &amp;lt;NSObject&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic, strong) Class cellClass;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic,  copy ) NSString* cellType;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@end&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS 宏(define)与常量(const)以及extern</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%20%E5%AE%8F(define)%E4%B8%8E%E5%B8%B8%E9%87%8F(const)%E4%BB%A5%E5%8F%8Aextern/"/>
-    <id>http://yoursite.com/2019/01/10/iOS 宏(define)与常量(const)以及extern/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.975Z</updated>
-    
-    <content type="html"><![CDATA[<p>###思考下，下面的有什么不同，分别在什么时候使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">extern NSString *HSCoder;</span><br><span class="line">extern const NSString *HSCoder;</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><a id="more"></a><p>###当我们想全局共用一些数据时，可以用宏、变量、常量</p><p>宏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br></pre></td></tr></table></figure></p><p>变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><p>常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">四种写法：</span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p><p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p><p>###const和static const区分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;; //本文件内部的全局常量</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;//用static修饰后，不能提供外界访问,只能在本文件内访问,或者导入本文件可用（iOS中只有.h文件的导入，所以定义在.h中，如果导入.h头文件那么外部也可以用，如果定义在.m则只能在.m本文件内部使用）</span><br></pre></td></tr></table></figure></p><p>###const修饰位置<br>const右边的总不能被修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">2.NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">3.NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;HSCoder&quot;不能被修改，&quot;*HSCoder&quot;能被修改</span><br></pre></td></tr></table></figure></p><h4 id="“static作用”"><a href="#“static作用”" class="headerlink" title="“static作用”:"></a>“static作用”:</h4><ul><li>修饰局部变量：</li></ul><p>1.延长局部变量的生命周期,程序结束才会销毁。</p><p>2.局部变量只会生成一份内存,只会初始化一次。</p><p>3.改变局部变量的作用域。</p><ul><li>修饰全局变量</li></ul><p>1.只能在本文件中访问,修改全局变量的作用域,生命周期不会改</p><p>2.避免重复定义全局变量</p><p>####const作用：限制类型</p><ul><li>1.const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）</li><li>2.被const修饰的变量是只读的。</li></ul><p>####”extern作用”:</p><ul><li>只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</li><li>“extern工作原理”:</li><li>先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</li></ul><p>知识补充：<br>对于指针a来说，*a就是指针a所指向的内存空间存储的值,&amp;a就是存储这个变量的内存地址,a是指针名</p><p>staic和const联合的作用:声明一个静态的全局只读常量,在”一个文件中”经常使用的字符串常量，可以使用static与const组合</p><p>extern与const组合的作用：在”多个文件中”经常使用的同一个字符串常量，可以使用extern与const组合。</p><ul><li>static与const组合：在每个文件都需要定义一份静态全局变量。</li><li>extern与const组合:只需要定义一份全局变量，多个文件共享</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;###思考下，下面的有什么不同，分别在什么时候使用呢？&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#define HSCoder @&amp;quot;汉斯哈哈哈&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;extern NSString *HSCoder;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;extern const NSString *HSCoder;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;static const NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;const NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NSString const *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>iOS中的@synthesize</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%E4%B8%AD%E7%9A%84@synthesize/"/>
-    <id>http://yoursite.com/2019/01/10/iOS中的@synthesize/</id>
+    <link href="http://yoursite.com/2019/01/10/11iOS%E4%B8%AD%E7%9A%84@synthesize/"/>
+    <id>http://yoursite.com/2019/01/10/11iOS中的@synthesize/</id>
     <published>2019-01-10T02:30:28.042Z</published>
     <updated>2019-01-11T06:34:05.457Z</updated>
     
@@ -216,56 +122,17 @@
   </entry>
   
   <entry>
-    <title>iOS之创建一个常驻线程</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%E4%B9%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%A9%BB%E7%BA%BF%E7%A8%8B/"/>
-    <id>http://yoursite.com/2019/01/10/iOS之创建一个常驻线程/</id>
+    <title>Swift  String和NSDate的相互转化</title>
+    <link href="http://yoursite.com/2019/01/10/14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
+    <id>http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:50:52.460Z</updated>
+    <updated>2019-01-11T06:50:52.422Z</updated>
     
-    <content type="html"><![CDATA[<p>常驻线程有什么用呢？<br>让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。</p><p>注意 ：不要使用GCD的global队列创建常驻线程<br>原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待</p><a id="more"></a><p>状态，后面加进来的block就不会创建新的线程执行了 等待前面的任务执行完成，才会继续执行。如果线程池中的线程长时间不结束，后续堆积的任务会越来越多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">@interface LongThreadDemoController ()</span><br><span class="line">@property (nonatomic, strong) NSThread *thread;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LongThreadDemoController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">self.view.backgroundColor = [UIColor whiteColor];</span><br><span class="line">self.title = @&quot;常驻线程Demo&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)threadRunloopPoint:(id)__unused object&#123;</span><br><span class="line">NSLog(@&quot;%@&quot;,NSStringFromSelector(_cmd));</span><br><span class="line">@autoreleasepool &#123;</span><br><span class="line">[[NSThread currentThread] setName:@&quot;changzhuThread&quot;];</span><br><span class="line">NSRunLoop *runLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">//// 这里主要是监听某个 port，目的是让这个 Thread 不会回收</span><br><span class="line">[runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];</span><br><span class="line">[runLoop run];</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (NSThread *)thread&#123;</span><br><span class="line"></span><br><span class="line">if(!_thread)&#123;</span><br><span class="line">_thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadRunloopPoint:) object:nil];</span><br><span class="line">[_thread start];</span><br><span class="line">&#125;</span><br><span class="line">return _thread;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)test&#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[self performSelector:@selector(test) onThread:self.thread withObject:nil waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
+    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;常驻线程有什么用呢？&lt;br&gt;让一个一直存在的子线程，等待其他线程发来消息，处理其他事件。&lt;/p&gt;
-&lt;p&gt;注意 ：不要使用GCD的global队列创建常驻线程&lt;br&gt;原因：global全局队列，整个工程共用的队列，队列里的所有线程都会放进一个线程池中，当线程池满了的时候，就会进入等待&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS保存图片到相册</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87%E5%88%B0%E7%9B%B8%E5%86%8C/"/>
-    <id>http://yoursite.com/2019/01/10/iOS保存图片到相册/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T07:02:57.397Z</updated>
-    
-    <content type="html"><![CDATA[<p>需要导入系统框架</p><p>#import &lt;Photos/Photos.h&gt;</p><p>然后我们直接上代码</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;需要导入系统框架&lt;/p&gt;
-&lt;p&gt;#import &amp;lt;Photos/Photos.h&amp;gt;&lt;/p&gt;
-&lt;p&gt;然后我们直接上代码&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS图片拉伸</title>
-    <link href="http://yoursite.com/2019/01/10/iOS%E5%9B%BE%E7%89%87%E6%8B%89%E4%BC%B8/"/>
-    <id>http://yoursite.com/2019/01/10/iOS图片拉伸/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.988Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br></pre></td></tr></table></figure><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line"></span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;UIImage * img = [UIImage imageNamed:@&amp;quot;3X&amp;quot;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;float w = img.size.width;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;float h = img.size.height;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
     
     </summary>
     
@@ -274,8 +141,8 @@
   
   <entry>
     <title>tableviewcell注册和不注册的区别及用法</title>
-    <link href="http://yoursite.com/2019/01/10/tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
-    <id>http://yoursite.com/2019/01/10/tableviewcell注册和不注册的区别及用法/</id>
+    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
     <published>2019-01-10T02:30:28.042Z</published>
     <updated>2019-01-11T06:55:42.984Z</updated>
     
@@ -291,17 +158,58 @@
   </entry>
   
   <entry>
-    <title>代码修改xib约束的值注意</title>
-    <link href="http://yoursite.com/2019/01/10/%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9xib%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%80%BC%E6%B3%A8%E6%84%8F/"/>
-    <id>http://yoursite.com/2019/01/10/代码修改xib约束的值注意/</id>
+    <title>TCP与UDP区别</title>
+    <link href="http://yoursite.com/2019/01/10/16TCP%E4%B8%8EUDP%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2019/01/10/16TCP与UDP区别/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.967Z</updated>
+    <updated>2019-01-11T06:55:41.151Z</updated>
     
-    <content type="html"><![CDATA[<p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>TCP与UDP区别总结：<br>1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接<br>2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付</p><a id="more"></a><p>3、TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的<br>UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低（对实时应用很有用，如IP电话，实时视频会议等）<br>4、每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信<br>5、TCP首部开销20字节;UDP的首部开销小，只有8个字节<br>6、TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道</p><p>UDP补充：<br>UDP不提供复杂的控制机制，利用IP提供面向无连接的通信服务。并且它是将应用程序发来的数据在收到的那一刻，立刻按照原样发送到网络上的一种机制。即使是出现网络拥堵的情况下，UDP也无法进行流量控制等避免网络拥塞的行为。此外，传输途中如果出现了丢包，UDO也不负责重发。甚至当出现包的到达顺序乱掉时也没有纠正的功能。如果需要这些细节控制，那么不得不交给由采用UDO的应用程序去处理。换句话说，UDP将部分控制转移到应用程序去处理，自己却只提供作为传输层协议的最基本功能。UDP有点类似于用户说什么听什么的机制，但是需要用户充分考虑好上层协议类型并制作相应的应用程序。</p><p>TCP补充：<br>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 &lt;/p&gt;
+      &lt;p&gt;TCP与UDP区别总结：&lt;br&gt;1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接&lt;br&gt;2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2019/01/10/1hello-world/"/>
+    <id>http://yoursite.com/2019/01/10/1hello-world/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T05:38:04.287Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p></blockquote><p> 我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！&lt;br&gt;以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。&lt;/p&gt;
+&lt;/blockq
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>__bridge，__bridge_transfer和__bridge_retained</title>
+    <link href="http://yoursite.com/2019/01/10/2__bridge%EF%BC%8C__bridge_transfer%E5%92%8C__bridge_retained/"/>
+    <id>http://yoursite.com/2019/01/10/2__bridge，__bridge_transfer和__bridge_retained/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:50:50.459Z</updated>
+    
+    <content type="html"><![CDATA[<p>####引言<br>Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。<br>Core Foundation框架和Foundation框架紧密相关，它们为相同功能提供接口，但Foundation框架提供Objective-C接口。<br>在开发iOS应用程序时我们有时会用到Core Foundation对象，下面简称CF。<br><a id="more"></a><br>例如Core Graphics、Core Text，并且我们可能需要将CF对象和OC对象进行相互转化，我们知道，ARC环境下，编译器不会自动管理CF对象的内存，我们需要手动管理。这就是说我们在创建一个CF对象以后需要我们使用CFRelease将其手动释放。</p><p>那么CF和OC相互转化的时候该如何管理内存呢？<br>我们可以通过<strong>bridge,</strong>bridge_transfer,__bridge_retained 来进行内存管理，其是ARC下OC对象和Core Foundation对象之间的桥梁</p><p>####1、__bridge<br>CF和OC对象转化时只涉及对象类型不涉及对象所有权的转化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//Image I/O 从 NSBundle 读取图片数据</span><br><span class="line">NSString *imagePath = [[NSBundle mainBundle] pathForResource:@&quot;image&quot; ofType:@&quot;png&quot;];</span><br><span class="line">CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:</span><br><span class="line">[[NSBundle mainBundle] pathForResource:@&quot;image&quot; ofType:@&quot;png&quot;]], NULL);</span><br><span class="line"></span><br><span class="line">OC对象转CF对象，只是转化类型，不涉及对象所有权</span><br></pre></td></tr></table></figure></p><p>####2、__bridge_transfer<br>常用在CF对象转化成OC对象时，将CF对象的所有权交给OC对象，此时ARC就能自动管理该内存,作用同CFBridgingRelease()</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//    __bridge_transfer  将CF对象的所有权（内存）交给OC对象，相当于CF对象执行了release，此时ARC就能自动管理该内存(OC对象由ARC管理内存)</span><br><span class="line">NSArray *ifs = (__bridge_transfer NSArray *)CNCopySupportedInterfaces();</span><br></pre></td></tr></table></figure><p>####3、<strong>bridge_retained</strong>bridge_retained与__bridge_transfer 相反，常用在将OC对象转化成CF对象，且OC对象的所有权也交给CF对象来管理。相当于对CF对象执行了retain操作，而OC对象本身的内存会由ARC来自动回收<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id obj = [[NSObject alloc] init];</span><br><span class="line">void *p = (__bridge_retained void *)obj;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####引言&lt;br&gt;Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。&lt;br&gt;Core Foundation框架和Foundation框架紧密相关，它们为相同功能提供接口，但Foundation框架提供Objective-C接口。&lt;br&gt;在开发iOS应用程序时我们有时会用到Core Foundation对象，下面简称CF。&lt;br&gt;
     
     </summary>
     
@@ -310,8 +218,8 @@
   
   <entry>
     <title>解决Mac和iOS模拟器间拷贝粘贴的问题</title>
-    <link href="http://yoursite.com/2019/01/10/%E8%A7%A3%E5%86%B3Mac%E5%92%8CiOS%E6%A8%A1%E6%8B%9F%E5%99%A8%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2019/01/10/解决Mac和iOS模拟器间拷贝粘贴的问题/</id>
+    <link href="http://yoursite.com/2019/01/10/4%E8%A7%A3%E5%86%B3Mac%E5%92%8CiOS%E6%A8%A1%E6%8B%9F%E5%99%A8%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2019/01/10/4解决Mac和iOS模拟器间拷贝粘贴的问题/</id>
     <published>2019-01-10T02:30:28.042Z</published>
     <updated>2019-01-11T01:50:05.528Z</updated>
     
@@ -330,9 +238,119 @@
   </entry>
   
   <entry>
+    <title>代码修改xib约束的值注意</title>
+    <link href="http://yoursite.com/2019/01/10/3%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9xib%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%80%BC%E6%B3%A8%E6%84%8F/"/>
+    <id>http://yoursite.com/2019/01/10/3代码修改xib约束的值注意/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.967Z</updated>
+    
+    <content type="html"><![CDATA[<p>有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 </p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(modifyConstant) withObject:nil afterDelay:0.1];//延迟加载,执行</span><br><span class="line">- (void)modifyConstant&#123;</span><br><span class="line">self.topSafeH.constant += 100;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有时候在初始化中或者viewdidload中直接改变top.constant的值没有用，可能是因为代码设置后 xib后更新（xib加载在代码设置后） 这个时候使用延迟加载即可 &lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>CADisplayLink小知识点获得FPS</title>
+    <link href="http://yoursite.com/2019/01/10/5CADisplayLink%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9%E8%8E%B7%E5%BE%97FPS/"/>
+    <id>http://yoursite.com/2019/01/10/5CADisplayLink小知识点获得FPS/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.997Z</updated>
+    
+    <content type="html"><![CDATA[<p>###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//CADisplayLink</span><br><span class="line">CADisplayLink * timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];</span><br><span class="line"></span><br><span class="line">[_link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line">- (void)tick:(CADisplayLink *)link &#123;</span><br><span class="line">if (_lastTime == 0) &#123;//上一次屏幕刷新的时间</span><br><span class="line">_lastTime = link.timestamp;//屏幕刷新的时间戳</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_count++;//刷新次数</span><br><span class="line">NSTimeInterval delta = link.timestamp - _lastTime;//获得两次刷新的时间间隔</span><br><span class="line">if (delta &lt; 1) return;//间隔1秒</span><br><span class="line">_lastTime = link.timestamp;</span><br><span class="line">float fps = _count / delta;//fps = 次数/时间间隔</span><br><span class="line">_count = 0;//置零 重新计算</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###CADisplayLink是一个能让我们以和屏幕刷新率同步的频率将特定的内容画到屏幕上的定时器类. iPhone设备的屏幕刷新是60Hz，即一秒60次。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS 宏(define)与常量(const)以及extern</title>
+    <link href="http://yoursite.com/2019/01/10/6iOS%20%E5%AE%8F(define)%E4%B8%8E%E5%B8%B8%E9%87%8F(const)%E4%BB%A5%E5%8F%8Aextern/"/>
+    <id>http://yoursite.com/2019/01/10/6iOS 宏(define)与常量(const)以及extern/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.975Z</updated>
+    
+    <content type="html"><![CDATA[<p>###思考下，下面的有什么不同，分别在什么时候使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">extern NSString *HSCoder;</span><br><span class="line">extern const NSString *HSCoder;</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><a id="more"></a><p>###当我们想全局共用一些数据时，可以用宏、变量、常量</p><p>宏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define HSCoder @&quot;汉斯哈哈哈&quot;</span><br></pre></td></tr></table></figure></p><p>变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><p>常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">四种写法：</span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br></pre></td></tr></table></figure></p><p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p><p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p><p>###const和static const区分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;; //本文件内部的全局常量</span><br><span class="line"></span><br><span class="line">static const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;//用static修饰后，不能提供外界访问,只能在本文件内访问,或者导入本文件可用（iOS中只有.h文件的导入，所以定义在.h中，如果导入.h头文件那么外部也可以用，如果定义在.m则只能在.m本文件内部使用）</span><br></pre></td></tr></table></figure></p><p>###const修饰位置<br>const右边的总不能被修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.const NSString *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">2.NSString const *HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;*HSCoder&quot;不能被修改， &quot;HSCoder&quot;能被修改</span><br><span class="line"></span><br><span class="line">3.NSString * const HSCoder = @&quot;汉斯哈哈哈&quot;;</span><br><span class="line">&quot;HSCoder&quot;不能被修改，&quot;*HSCoder&quot;能被修改</span><br></pre></td></tr></table></figure></p><h4 id="“static作用”"><a href="#“static作用”" class="headerlink" title="“static作用”:"></a>“static作用”:</h4><ul><li>修饰局部变量：</li></ul><p>1.延长局部变量的生命周期,程序结束才会销毁。</p><p>2.局部变量只会生成一份内存,只会初始化一次。</p><p>3.改变局部变量的作用域。</p><ul><li>修饰全局变量</li></ul><p>1.只能在本文件中访问,修改全局变量的作用域,生命周期不会改</p><p>2.避免重复定义全局变量</p><p>####const作用：限制类型</p><ul><li>1.const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）</li><li>2.被const修饰的变量是只读的。</li></ul><p>####”extern作用”:</p><ul><li>只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</li><li>“extern工作原理”:</li><li>先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</li></ul><p>知识补充：<br>对于指针a来说，*a就是指针a所指向的内存空间存储的值,&amp;a就是存储这个变量的内存地址,a是指针名</p><p>staic和const联合的作用:声明一个静态的全局只读常量,在”一个文件中”经常使用的字符串常量，可以使用static与const组合</p><p>extern与const组合的作用：在”多个文件中”经常使用的同一个字符串常量，可以使用extern与const组合。</p><ul><li>static与const组合：在每个文件都需要定义一份静态全局变量。</li><li>extern与const组合:只需要定义一份全局变量，多个文件共享</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###思考下，下面的有什么不同，分别在什么时候使用呢？&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#define HSCoder @&amp;quot;汉斯哈哈哈&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;extern NSString *HSCoder;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;extern const NSString *HSCoder;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;static const NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;const NSString *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NSString const *HSCoder = @&amp;quot;汉斯哈哈哈&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS 协议中定义属性</title>
+    <link href="http://yoursite.com/2019/01/10/7iOS%20%E5%8D%8F%E8%AE%AE%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7/"/>
+    <id>http://yoursite.com/2019/01/10/7iOS 协议中定义属性/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T07:00:37.693Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@protocol CETableViewModelProtocol &lt;NSObject&gt;</span><br><span class="line">@property (nonatomic, strong) Class cellClass;</span><br><span class="line">@property (nonatomic,  copy ) NSString* cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure><a id="more"></a><p>协议中是可以定义属性的，但是只有对应的getter和setter方法 但是没有对应的成员变量 而getter和setter就是操作的对应成员变量</p><p>所以就无法调用getter或者setter 否则项目崩溃</p><p>想要调用的话 需要在实现这个协议的类中用@synthesize cellType     = _cellType;来声明成员变量,这样这个类的对象就拥有了协议中定义的这些属性，用法跟自身其他属性一样就不啰嗦了。</p><p>来看看实例吧：</p><p>.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CETableViewModelProtocol.h&quot;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface CETableViewModel : NSObject &lt;CETableViewModelProtocol&gt;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br></pre></td></tr></table></figure></p><p>.m</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CETableViewModel.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CETableViewModel</span><br><span class="line">@synthesize cellHeight   = _cellHeight;</span><br><span class="line">@synthesize cellType     = _cellType;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;@protocol CETableViewModelProtocol &amp;lt;NSObject&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic, strong) Class cellClass;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@property (nonatomic,  copy ) NSString* cellType;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;@end&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS图片拉伸</title>
+    <link href="http://yoursite.com/2019/01/10/9iOS%E5%9B%BE%E7%89%87%E6%8B%89%E4%BC%B8/"/>
+    <id>http://yoursite.com/2019/01/10/9iOS图片拉伸/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.988Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UIImage * img = [UIImage imageNamed:@&quot;3X&quot;];</span><br><span class="line">float w = img.size.width;</span><br><span class="line">float h = img.size.height;</span><br></pre></td></tr></table></figure><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//图片拉伸 当imgview的frame跟img不一样大时就会拉伸图片来填充</span><br><span class="line">//第一个参数 UIEdgeInsets 是规定上下左右到img边的部分不拉伸受到保护 中间部分进行拉伸</span><br><span class="line"></span><br><span class="line">//UIImageResizingModeStretch 拉伸</span><br><span class="line">//UIImageResizingModeTile 平铺</span><br><span class="line">UIImage * newImg = [img resizableImageWithCapInsets:</span><br><span class="line">UIEdgeInsetsMake(h * 0.5, w * 0.5, h * 0.5, w * 0.5)         </span><br><span class="line">resizingMode:</span><br><span class="line">UIImageResizingModeStretch];</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;UIImage * img = [UIImage imageNamed:@&amp;quot;3X&amp;quot;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;float w = img.size.width;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;float h = img.size.height;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS保存图片到相册</title>
+    <link href="http://yoursite.com/2019/01/10/8iOS%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87%E5%88%B0%E7%9B%B8%E5%86%8C/"/>
+    <id>http://yoursite.com/2019/01/10/8iOS保存图片到相册/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T07:02:57.397Z</updated>
+    
+    <content type="html"><![CDATA[<p>需要导入系统框架</p><p>#import &lt;Photos/Photos.h&gt;</p><p>然后我们直接上代码</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (void)clickQRCode:(UIImage *)image</span><br><span class="line">&#123;</span><br><span class="line">[MBProgressHUD HUDForView:self.view];</span><br><span class="line">[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^&#123;</span><br><span class="line">[PHAssetChangeRequest creationRequestForAssetFromImage:image];</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">&#125; completionHandler:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;success = %d, error = %@&quot;, success, error);</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">[MBProgressHUD hideHUDForView:self.view];</span><br><span class="line"></span><br><span class="line">if (success) &#123;</span><br><span class="line">[MBProgressHUD showSuccess:@&quot;保存成功&quot; toView:self.view];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;请在“设置-隐私”中允许空能净访问您的照片&quot; message:nil delegate:self cancelButtonTitle:@&quot;好的&quot; otherButtonTitles:nil, nil];</span><br><span class="line">[alert show];</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;需要导入系统框架&lt;/p&gt;
+&lt;p&gt;#import &amp;lt;Photos/Photos.h&amp;gt;&lt;/p&gt;
+&lt;p&gt;然后我们直接上代码&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>NSOperation、NSOperationQueue</title>
-    <link href="http://yoursite.com/2019/01/10/NSOperation%E3%80%81NSOperationQueue/"/>
-    <id>http://yoursite.com/2019/01/10/NSOperation、NSOperationQueue/</id>
+    <link href="http://yoursite.com/2019/01/10/13NSOperation%E3%80%81NSOperationQueue/"/>
+    <id>http://yoursite.com/2019/01/10/13NSOperation、NSOperationQueue/</id>
     <published>2019-01-10T02:30:28.042Z</published>
     <updated>2019-01-11T06:50:52.402Z</updated>
     
