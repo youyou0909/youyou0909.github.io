@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-23T03:14:02.315Z</updated>
+  <updated>2019-01-28T03:27:48.692Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决gitlab（sourcetree）需要输入用户名密码的问题</title>
+    <link href="http://yoursite.com/2019/01/28/%E8%A7%A3%E5%86%B3gitlab%EF%BC%88sourcetree%EF%BC%89%E9%9C%80%E8%A6%81%E8%BE%93%E5%85%A5%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2019/01/28/解决gitlab（sourcetree）需要输入用户名密码的问题/</id>
+    <published>2019-01-28T03:23:43.425Z</published>
+    <updated>2019-01-28T03:27:48.692Z</updated>
+    
+    <content type="html"><![CDATA[<p>每次pull或者push时都要输入好几次密码，真的很烦。下面的方法亲测有效，希望能帮到你！</p><p>1.  进入~用户目录（不是工程目录哦~）：cd ~</p><p>2. 建立文件： touch  .git-credentials</p><a id="more"></a><p>3. 编辑文件： vi  .git-credentials</p><p>4. 添加http://用户名:密码@gitlab.com</p><p>5. 执行命令：git config –global credential.helper store</p><p>6. 查看文件：more .gitconfig，可以看到如下信息，设置成功</p><p><img src="https://upload-images.jianshu.io/upload_images/4055583-a642c5194ff523cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat724eff6df533b4bb8a89a3ac40af20f6.png"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;每次pull或者push时都要输入好几次密码，真的很烦。下面的方法亲测有效，希望能帮到你！&lt;/p&gt;
+&lt;p&gt;1.  进入~用户目录（不是工程目录哦~）：cd ~&lt;/p&gt;
+&lt;p&gt;2. 建立文件： touch  .git-credentials&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>CGAffineTransform和CATransform3D原理</title>
@@ -287,17 +307,22 @@
   </entry>
   
   <entry>
-    <title>tableviewcell注册和不注册的区别及用法</title>
-    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
-    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2019/01/10/1hello-world/"/>
+    <id>http://yoursite.com/2019/01/10/1hello-world/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.984Z</updated>
+    <updated>2019-01-11T05:38:04.287Z</updated>
     
-    <content type="html"><![CDATA[<p>注册和不注册的区别主要看下面这两个方法：</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p></blockquote><p> 我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;注册和不注册的区别主要看下面这两个方法：&lt;/p&gt;
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！&lt;br&gt;以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。&lt;/p&gt;
+&lt;/blockq
+      
     
     </summary>
     
@@ -323,22 +348,17 @@
   </entry>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2019/01/10/1hello-world/"/>
-    <id>http://yoursite.com/2019/01/10/1hello-world/</id>
+    <title>tableviewcell注册和不注册的区别及用法</title>
+    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
     <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T05:38:04.287Z</updated>
+    <updated>2019-01-11T06:55:42.984Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！<br>以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。</p></blockquote><p> 我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>]]></content>
+    <content type="html"><![CDATA[<p>注册和不注册的区别主要看下面这两个方法：</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;今天是个人博客开通的第一天，搞了半天终于好了，好激动！！！&lt;br&gt;以前自己做的学习记录有在本地文件的，有在备忘录的，有在简书的。。。反正就是各种地方，很多慢慢都找不到了。这次正好最近闲下来整理下。慢慢的都放到自己的博客中。&lt;/p&gt;
-&lt;/blockq
-      
+      &lt;p&gt;注册和不注册的区别主要看下面这两个方法：&lt;/p&gt;
     
     </summary>
     

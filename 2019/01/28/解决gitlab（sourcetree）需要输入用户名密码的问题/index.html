@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Swift  String和NSDate的相互转化 |
+    解决gitlab（sourcetree）需要输入用户名密码的问题 |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-14Swift  String和NSDate的相互转化" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-解决gitlab（sourcetree）需要输入用户名密码的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Swift  String和NSDate的相互转化
+      解决gitlab（sourcetree）需要输入用户名密码的问题
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/14Swift  String和NSDate的相互转化/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+        <a href="/2019/01/28/解决gitlab（sourcetree）需要输入用户名密码的问题/" class="article-date">
+  <time datetime="2019-01-28T03:23:43.425Z" itemprop="datePublished">2019-01-28</time>
 </a>
         
       </div>
@@ -51,43 +51,20 @@
       
       
       
-        <p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p>
+        <p>每次pull或者push时都要输入好几次密码，真的很烦。下面的方法亲测有效，希望能帮到你！</p>
+<p>1.  进入~用户目录（不是工程目录哦~）：cd ~</p>
+<p>2. 建立文件： touch  .git-credentials</p>
 <a id="more"></a>
-<p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p>
-<p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p>
-<p>####2.NSDate 转化成 String</p>
-<p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p>
-<pre><code>####3.由日期判断是星期几
-        扩展 NSDate,写一个方法
-        extension NSDate{
+<p>3. 编辑文件： vi  .git-credentials</p>
+<p>4. 添加http://用户名:密码@gitlab.com</p>
+<p>5. 执行命令：git config –global credential.helper store</p>
+<p>6. 查看文件：more .gitconfig，可以看到如下信息，设置成功</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4055583-a642c5194ff523cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat724eff6df533b4bb8a89a3ac40af20f6.png"></p>
 
-
-            func resultWeek()-&gt;Int{
-                 let interval = self.timeIntervalSince1970
-                         let day = Int(interval/86400)
-                                return (day-3)%7
-                                     }
-                                     }
-                                     上面的&quot;20161224191234&quot;判断一下是周几
-                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]
-                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六
-
-                                     ####4.判断两个日期时间差
-
-                                     let firstDate = &quot;2016-09-24&quot;
-                                     let secondDate = &quot;2016-12-24&quot;
-                                     let cformatter = NSDateFormatter()
-                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;
-                                     let sDate = cformatter.dateFromString(firstDate)
-                                     let cDate = cformatter.dateFromString(secondDate)
-                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)
-                                     let day_seconds = 24*3600 //一天的秒数
-                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)
-</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/" data-id="cjrfrwum2000btdlbwv0mfl6v" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/28/解决gitlab（sourcetree）需要输入用户名密码的问题/" data-id="cjrfrwumb000mtdlbyyf1gwe3" class="article-share-link">分享</a>
       
     </footer>
 
@@ -97,19 +74,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/12Mac端口被占用解决办法/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            Mac端口被占用解决办法
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/01/10/1hello-world/" class="article-nav-link">
+      <a href="/2019/01/23/17CGAffineTransform和CATransform3D原理/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">CGAffineTransform和CATransform3D原理</div>
       </a>
     
   </nav>
