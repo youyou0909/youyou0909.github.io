@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-28T03:27:48.692Z</updated>
+  <updated>2019-01-31T02:38:39.017Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ios之anchorPoint和position详解</title>
+    <link href="http://yoursite.com/2019/01/31/anchorPoint%E5%92%8Cposition%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://yoursite.com/2019/01/31/anchorPoint和position详解/</id>
+    <published>2019-01-31T02:28:40.829Z</published>
+    <updated>2019-01-31T02:38:39.017Z</updated>
+    
+    <content type="html"><![CDATA[<p>UIView 有三个属性 frame bounds center 我们都了解，这里就不多说了。<br>CALayer 也有对应的属性 frame bounds position anchorPoint<br><a id="more"></a><br>默认的anchorPoint为（0.5，0.5） 这时position就是CALayer的中心点 相当于UIView的center</p><p>anchorPoint相当于钉在墙上的白纸上的图钉 ，主要作用就是用来做图形变换的指定，如旋转 平移 缩放。它的坐标是相对于自身的比例坐标  x,y值最大是1，最小是0</p><p>position是CALayer在父Layer坐标系中的自身anchorPoint的位置，两者是重合的一点，只是position是相对于父Layer坐标  anchorPoint是相对于自身的比例坐标</p><p>两者之间的换算：<br>position.x = frame.origin.x + anchorPoint.x <em><br>bounds.size.width；<br>position.y = frame.origin.y + anchorPoint.y </em><br>bounds.size.height；</p><p>#####特别注意的是，两者之间互不影响 单个修改任一个的值 并不会影响两一个的值 只会影响frame.origin的值</p><p>三者之间的换算：<br>frame.origin.x = position.x - anchorPoint.x <em><br>bounds.size.width；<br>frame.origin.y = position.y - anchorPoint.y </em><br>bounds.size.height；</p><p>从公式中我们可以知道：当position.x增大时frame.origin.x也相应增加 而且增加的是一样的值，position.y也是一样道理<br>当增大时 frame.origin.x是减小的 减小的值=anchorPoint.x增加的幅度 * bounds.size.width。anchorPoint.y也是一样道理</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;UIView 有三个属性 frame bounds center 我们都了解，这里就不多说了。&lt;br&gt;CALayer 也有对应的属性 frame bounds position anchorPoint&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>解决gitlab（sourcetree）需要输入用户名密码的问题</title>
@@ -240,30 +258,6 @@
   </entry>
   
   <entry>
-    <title>Mac端口被占用解决办法</title>
-    <link href="http://yoursite.com/2019/01/10/12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
-    <id>http://yoursite.com/2019/01/10/12Mac端口被占用解决办法/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T01:10:56.376Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL</p><p>2、使用kill -9 + pid </p><p>3、重启xcode</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL&lt;/p&gt;
-&lt;p&gt;2、使用kill -9 + pid &lt;/p&gt;
-&lt;p&gt;3、重启xcode&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>iOS中的@synthesize</title>
     <link href="http://yoursite.com/2019/01/10/11iOS%E4%B8%AD%E7%9A%84@synthesize/"/>
     <id>http://yoursite.com/2019/01/10/11iOS中的@synthesize/</id>
@@ -289,6 +283,30 @@
   </entry>
   
   <entry>
+    <title>Mac端口被占用解决办法</title>
+    <link href="http://yoursite.com/2019/01/10/12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/12Mac端口被占用解决办法/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T01:10:56.376Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL</p><p>2、使用kill -9 + pid </p><p>3、重启xcode</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;1、命令 lsof -i tcp:port  （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL&lt;/p&gt;
+&lt;p&gt;2、使用kill -9 + pid &lt;/p&gt;
+&lt;p&gt;3、重启xcode&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Swift  String和NSDate的相互转化</title>
     <link href="http://yoursite.com/2019/01/10/14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
     <id>http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/</id>
@@ -307,24 +325,6 @@
   </entry>
   
   <entry>
-    <title>tableviewcell注册和不注册的区别及用法</title>
-    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
-    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:55:42.984Z</updated>
-    
-    <content type="html"><![CDATA[<p>注册和不注册的区别主要看下面这两个方法：</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;注册和不注册的区别主要看下面这两个方法：&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>TCP与UDP区别</title>
     <link href="http://yoursite.com/2019/01/10/16TCP%E4%B8%8EUDP%E5%8C%BA%E5%88%AB/"/>
     <id>http://yoursite.com/2019/01/10/16TCP与UDP区别/</id>
@@ -336,6 +336,24 @@
     <summary type="html">
     
       &lt;p&gt;TCP与UDP区别总结：&lt;br&gt;1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接&lt;br&gt;2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>tableviewcell注册和不注册的区别及用法</title>
+    <link href="http://yoursite.com/2019/01/10/15tableviewcell%E6%B3%A8%E5%86%8C%E5%92%8C%E4%B8%8D%E6%B3%A8%E5%86%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%8F%8A%E7%94%A8%E6%B3%95/"/>
+    <id>http://yoursite.com/2019/01/10/15tableviewcell注册和不注册的区别及用法/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:55:42.984Z</updated>
+    
+    <content type="html"><![CDATA[<p>注册和不注册的区别主要看下面这两个方法：</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (nullable __kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier; </span><br><span class="line">// Used by the delegate to acquire an already allocated cell, in lieu of allocating a new one.</span><br><span class="line">(返回给代理一个已经分配的cell，代替一个新的cell，如果没有已分配的cell，则返回nil，使用这个方法就不需要注册了)</span><br><span class="line"></span><br><span class="line">- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(6_0); </span><br><span class="line">// newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered  </span><br><span class="line">如果cell的identifier是注册过的，那么这个新列出的方法保证返回一个cell (有分配的就返回已分配的cell，没有返回新的cell)并适当调整大小，可省略cell空值判断步骤，用这个方法cell必须注册,不是自定义的cell，UITableViewCell也要注册</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;注册和不注册的区别主要看下面这两个方法：&lt;/p&gt;
     
     </summary>
     

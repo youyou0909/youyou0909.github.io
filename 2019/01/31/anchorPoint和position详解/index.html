@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    TCP与UDP区别 |
+    ios之anchorPoint和position详解 |
     
     悠悠我心</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-16TCP与UDP区别" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <article id="post-anchorPoint和position详解" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      TCP与UDP区别
+      ios之anchorPoint和position详解
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/01/10/16TCP与UDP区别/" class="article-date">
-  <time datetime="2019-01-10T02:30:28.042Z" itemprop="datePublished">2019-01-10</time>
+        <a href="/2019/01/31/anchorPoint和position详解/" class="article-date">
+  <time datetime="2019-01-31T02:28:40.829Z" itemprop="datePublished">2019-01-31</time>
 </a>
         
       </div>
@@ -51,16 +51,18 @@
       
       
       
-        <p>TCP与UDP区别总结：<br>1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接<br>2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保   证可靠交付</p>
-<a id="more"></a>
-<p>3、TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的<br>UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低（对实时应用很有用，如IP电话，实时视频会议等）<br>4、每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信<br>5、TCP首部开销20字节;UDP的首部开销小，只有8个字节<br>6、TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道</p>
-<p>UDP补充：<br>UDP不提供复杂的控制机制，利用IP提供面向无连接的通信服务。并且它是将应用程序发来的数据在收到的那一刻，立刻按照原样发送到网络上的一种机制。即使是出现网络拥堵的情况下，UDP也无法进行流量控制等避免网络拥塞的行为。此外，传输途中如果出现了丢包，UDO也不负责重发。甚至当出现包的到达顺序乱掉时也没有纠正的功能。如果需要这些细节控制，那么不得不交给由采用UDO的应用程序去处理。换句话说，UDP将部分控制转移到应用程序去处理，自己却只提供作为传输层协议的最基本功能。UDP有点类似于用户说什么听什么的机制，但是需要用户充分考虑好上层协议类型并制作相应的应用程序。</p>
-<p>TCP补充：<br>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>
+        <p>UIView 有三个属性 frame bounds center 我们都了解，这里就不多说了。<br>CALayer 也有对应的属性 frame bounds position anchorPoint<br><a id="more"></a><br>默认的anchorPoint为（0.5，0.5） 这时position就是CALayer的中心点 相当于UIView的center</p>
+<p>anchorPoint相当于钉在墙上的白纸上的图钉 ，主要作用就是用来做图形变换的指定，如旋转 平移 缩放。它的坐标是相对于自身的比例坐标  x,y值最大是1，最小是0</p>
+<p>position是CALayer在父Layer坐标系中的自身anchorPoint的位置，两者是重合的一点，只是position是相对于父Layer坐标  anchorPoint是相对于自身的比例坐标</p>
+<p>两者之间的换算：<br>position.x = frame.origin.x + anchorPoint.x <em><br>bounds.size.width；<br>position.y = frame.origin.y + anchorPoint.y </em><br>bounds.size.height；</p>
+<p>#####特别注意的是，两者之间互不影响 单个修改任一个的值 并不会影响两一个的值 只会影响frame.origin的值</p>
+<p>三者之间的换算：<br>frame.origin.x = position.x - anchorPoint.x <em><br>bounds.size.width；<br>frame.origin.y = position.y - anchorPoint.y </em><br>bounds.size.height；</p>
+<p>从公式中我们可以知道：当position.x增大时frame.origin.x也相应增加 而且增加的是一样的值，position.y也是一样道理<br>当增大时 frame.origin.x是减小的 减小的值=anchorPoint.x增加的幅度 * bounds.size.width。anchorPoint.y也是一样道理</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/10/16TCP与UDP区别/" data-id="cjrk0h1wz000drdlbetxemk59" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/01/31/anchorPoint和position详解/" data-id="cjrk0h1x8000nrdlbgzhhxpgr" class="article-share-link">分享</a>
       
     </footer>
 
@@ -70,19 +72,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/01/10/14Swift  String和NSDate的相互转化/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            Swift  String和NSDate的相互转化
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/01/10/15tableviewcell注册和不注册的区别及用法/" class="article-nav-link">
+      <a href="/2019/01/28/解决gitlab（sourcetree）需要输入用户名密码的问题/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">tableviewcell注册和不注册的区别及用法</div>
+        <div class="article-nav-title">解决gitlab（sourcetree）需要输入用户名密码的问题</div>
       </a>
     
   </nav>
