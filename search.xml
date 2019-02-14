@@ -71,14 +71,14 @@
     <content type="text"><![CDATA[常见的有两种用法 其实是一个意思 @synthesize student; 等价于 @synthesize student = student @synthesize student = _student ARC下 通过@property声明的属性，编译器会自动声明对应的成员变量和getter/setter方法 而@synthesize student = _student就是程序猿自己显式地声明属性对应的成员变量，而不用编译器自生成的我们知道getter和setter方法里面操作的其实就是属性对应的成员变量 成员变量其实本质上就是一个变量指针 那么调用两者有什么区别呢？12self.name = @&quot;我信你个鬼&quot;;_name = @&quot;我信你个大头鬼&quot;; self.name本质上是调用的setter方法setName() 而setter方法是依赖于@property的属性修饰符的，比如retain，assign等属性。也就是会影响其引用计数 而_name = @”我信你个大头鬼” 只是变量的赋值 不涉及retain、assign等]]></content>
   </entry>
   <entry>
-    <title><![CDATA[Mac端口被占用解决办法]]></title>
-    <url>%2F2019%2F01%2F10%2F12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[1、命令 lsof -i tcp:port （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL 2、使用kill -9 + pid 3、重启xcode]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[Swift String和NSDate的相互转化]]></title>
     <url>%2F2019%2F01%2F10%2F14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96%2F</url>
     <content type="text"><![CDATA[####1.String 转化成 NSDate :通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDatelet dateString = “20161224191234” let formatter = NSDateFormatter()formatter.dateFormat = “yyyyMMddHHmmss”formatter.dateFromString(dateString) 这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil. ####2.NSDate 转化成 String var normalTime:String{ let formatter = NSDateFormatter() formatter.dateFormat = “yyyy-MM-dd HH:mm:ss” return formatter.stringFromDate(NSDate()) } 这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定 ####3.由日期判断是星期几 扩展 NSDate,写一个方法 extension NSDate{ func resultWeek()-&gt;Int{ let interval = self.timeIntervalSince1970 let day = Int(interval/86400) return (day-3)%7 } } 上面的&quot;20161224191234&quot;判断一下是周几 let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;] let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六 ####4.判断两个日期时间差 let firstDate = &quot;2016-09-24&quot; let secondDate = &quot;2016-12-24&quot; let cformatter = NSDateFormatter() cformatter.dateFormat = &quot;yyyy-MM-dd&quot; let sDate = cformatter.dateFromString(firstDate) let cDate = cformatter.dateFromString(secondDate) let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒) let day_seconds = 24*3600 //一天的秒数 let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Mac端口被占用解决办法]]></title>
+    <url>%2F2019%2F01%2F10%2F12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[1、命令 lsof -i tcp:port （port替换成端口号，比如8081）可以查看该端口被什么程序占用，并显示pid，方便KILL 2、使用kill -9 + pid 3、重启xcode]]></content>
   </entry>
   <entry>
     <title><![CDATA[tableviewcell注册和不注册的区别及用法]]></title>
