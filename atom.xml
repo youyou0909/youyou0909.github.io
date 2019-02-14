@@ -283,24 +283,6 @@
   </entry>
   
   <entry>
-    <title>Swift  String和NSDate的相互转化</title>
-    <link href="http://yoursite.com/2019/01/10/14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
-    <id>http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/</id>
-    <published>2019-01-10T02:30:28.042Z</published>
-    <updated>2019-01-11T06:50:52.422Z</updated>
-    
-    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>Mac端口被占用解决办法</title>
     <link href="http://yoursite.com/2019/01/10/12Mac%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2019/01/10/12Mac端口被占用解决办法/</id>
@@ -318,6 +300,24 @@
 &lt;p&gt;3、重启xcode&lt;/p&gt;
 
       
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Swift  String和NSDate的相互转化</title>
+    <link href="http://yoursite.com/2019/01/10/14Swift%20%20String%E5%92%8CNSDate%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/"/>
+    <id>http://yoursite.com/2019/01/10/14Swift  String和NSDate的相互转化/</id>
+    <published>2019-01-10T02:30:28.042Z</published>
+    <updated>2019-01-11T06:50:52.422Z</updated>
+    
+    <content type="html"><![CDATA[<p>####1.String 转化成 NSDate :<br>通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate<br>let dateString = “20161224191234”</p><a id="more"></a><p>let formatter = NSDateFormatter()<br>formatter.dateFormat = “yyyyMMddHHmmss”<br>formatter.dateFromString(dateString)</p><p>这里的 dateFormat 格式要跟你自己的日期字符串格式一样, HH 为24小时制须大写,如不大写,上面转换出来结果为 nil.</p><p>####2.NSDate 转化成 String</p><p>var normalTime:String{<br>    let formatter = NSDateFormatter()<br>         formatter.dateFormat = “yyyy-MM-dd HH:mm:ss”<br>             return formatter.stringFromDate(NSDate())<br>             }<br>             这样结果就是2016-12-24 19:12:34的格式,格式由自己需求来定</p><pre><code>####3.由日期判断是星期几        扩展 NSDate,写一个方法        extension NSDate{            func resultWeek()-&gt;Int{                 let interval = self.timeIntervalSince1970                         let day = Int(interval/86400)                                return (day-3)%7                                     }                                     }                                     上面的&quot;20161224191234&quot;判断一下是周几                                     let weeks = [&quot;星期日&quot;,&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;,&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;]                                     let week = weeks[formatter.dateFromString(dateString)!.resultWeek()] 结果是星期六                                     ####4.判断两个日期时间差                                     let firstDate = &quot;2016-09-24&quot;                                     let secondDate = &quot;2016-12-24&quot;                                     let cformatter = NSDateFormatter()                                     cformatter.dateFormat = &quot;yyyy-MM-dd&quot;                                     let sDate = cformatter.dateFromString(firstDate)                                     let cDate = cformatter.dateFromString(secondDate)                                     let intervals = cDate?.timeIntervalSinceDate(sDate!) //时间差(单位是秒)                                     let day_seconds = 24*3600 //一天的秒数                                     let days = Int(intervals!)/day_seconds //结果就是两个日期的时间差(单位是天)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;####1.String 转化成 NSDate :&lt;br&gt;通常我在提交数据的时候时间格式都是14位,例如:”20161224191234”, 为了开发方便,需要把字符串转化成 NSDate&lt;br&gt;let dateString = “20161224191234”&lt;/p&gt;
     
     </summary>
     
