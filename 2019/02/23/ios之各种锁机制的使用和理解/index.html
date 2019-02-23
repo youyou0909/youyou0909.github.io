@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    ios之各种锁机制的使用和理解 |
+    
+    悠悠我心</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-ios之各种锁机制的使用和理解" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ios之各种锁机制的使用和理解
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/02/23/ios之各种锁机制的使用和理解/" class="article-date">
+  <time datetime="2019-02-23T09:10:43.000Z" itemprop="datePublished">2019-02-23</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>锁可以分为两大类：自旋锁（OSSpinLock）和互斥锁（pthread_mutex）。</p>
+<p>相同点：<br>都能保证同一时间只有一个线程访问共享资源。都能保证线程安全。</p>
+<p>不同点：<br>互斥锁：如果共享数据已经有其他线程加锁了，线程会进入休眠状态等待锁。一旦被访问的资源被解锁，则等待资源的线程会被唤醒。<br>自旋锁：如果共享数据已经有其他线程加锁了，线程会以死循环的方式等待锁，一旦被访问的资源被解锁，则等待资源的线程会立即执行。<br>自旋锁的效率高于互斥锁。</p>
+<p>各种锁性能：<br>除了 OSSpinLock 外，dispatch_semaphore 和 pthread_mutex 性能是最高 @synchronized() 是性能最低的<br><a id="more"></a><br>OSSpinLock已经废除就不做介绍了<br>下面是常见的几种锁：</p>
+<p>####@synchronized()<br> 互斥锁@synchronized (obj):obj为该锁的唯一标识,标识相同则是同一把锁。当线程里执行obj锁{}代码块时 相当于获得了obj锁 这时其他线程就不能获得obj锁<br>只有当{}代码块执行完释放了obj锁 其他线程才能获得这个锁 并执行{}中锁住的代码</p>
+<p>@synchronized锁 里套 @synchronized锁 是不会死锁的 因为@synchronized底层实现使用的就是递归锁(NSRecursiveLock)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#pragma mark - @synchronized的互斥</span><br><span class="line">- (void)twoSynchronized&#123;</span><br><span class="line">    /*  @synchronized(obj)指令使用的obj为该锁的唯一标识，只有当标识相同时，才为满足互斥 </span><br><span class="line">下面两个@synchronized锁的标识一样 是同一把锁 当第一个线程获得锁后 锁里面的代码执行完后才释放锁 </span><br><span class="line">第二个线程才能获取到锁 才能继续执行锁里面的内容  所以执行结果是：</span><br><span class="line">     需要线程同步的操作1 开始</span><br><span class="line">     需要线程同步的操作1 结束</span><br><span class="line">     需要线程同步的操作2</span><br><span class="line">     */</span><br><span class="line">    NSObject *obj = [[NSObject alloc] init];</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        @synchronized(obj) &#123;</span><br><span class="line">            NSLog(@&quot;需要线程同步的操作1 开始&quot;);</span><br><span class="line">            sleep(3);</span><br><span class="line">            NSLog(@&quot;需要线程同步的操作1 结束&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        sleep(1);</span><br><span class="line">        @synchronized(obj) &#123;</span><br><span class="line">            NSLog(@&quot;需要线程同步的操作2&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#####NSLock 互斥锁</p>
+<p>NSLock 遵循 NSLocking 协议，lock() unlock()方法是NSLocking协议的方法，就不说了 ，一个加锁一个解锁 总是成对出现 .<br>NSLock类还增加了- (BOOL)tryLock;和- (BOOL)lockBeforeDate:(NSDate *)limit;方法。我们来看下：</p>
+<p>tryLock尝试获取一个锁，但是如果锁不可用的时候，它不会阻塞线程，相反，它只是返回NO。如果获取到锁后要记得unlock解锁，这样其他线程才能获取锁 相当于[lock lockBeforeDate:[NSDate date]];<br>lockBeforeDate:方法试图获取一个锁，但是如果锁没有在规定的时间内被获得，它会让线程从阻塞状态变为非阻塞状态（或者返回NO）。会等待时间 如果时间到了还没有获取到锁则返回NO 如果获取到了就执行下面语句 没获取到 且时间还没到就会等待着 也就是线程阻塞 不会执行后面的代码</p>
+<p>看一段代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">NSLock *lock = [[NSLock alloc] init];</span><br><span class="line">// 线程1</span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">    [lock lockBeforeDate:[NSDate date]];</span><br><span class="line">    NSLog(@&quot;需要线程同步的操作1 开始&quot;);</span><br><span class="line">    sleep(2);</span><br><span class="line">    NSLog(@&quot;需要线程同步的操作1 结束&quot;);</span><br><span class="line">    [lock unlock];</span><br><span class="line">&#125;);</span><br><span class="line">// 线程2</span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">    sleep(1); //以保证让线程2的代码后执行</span><br><span class="line">    if ([lock tryLock]) &#123;//尝试获取锁，如果获取不到返回NO，不会阻塞该线程，如果获取到锁 记得unlock解锁</span><br><span class="line">        NSLog(@&quot;锁可用的操作&quot;);</span><br><span class="line">        [lock unlock];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        NSLog(@&quot;锁不可用的操作&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:3];</span><br><span class="line">    if ([lock lockBeforeDate:date]) &#123;//尝试在未来的3s内获取锁，并阻塞该线程，如果3s内获取不到恢复线程, 返回NO,不再阻塞线程</span><br><span class="line">        NSLog(@&quot;没有超时，获得锁&quot;);</span><br><span class="line">        [lock unlock];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        NSLog(@&quot;超时，没有获得锁&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> 结果：</span><br><span class="line"> 需要线程同步的操作1 开始</span><br><span class="line"> 锁不可用的操作</span><br><span class="line"> 需要线程同步的操作1 结束</span><br><span class="line"> 没有超时，获得锁</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p>####NSConditionLock – 条件锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@interface NSConditionLock : NSObject &lt;NSLocking&gt; &#123;</span><br><span class="line">@private</span><br><span class="line">    void *_priv;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCondition:(NSInteger)condition NS_DESIGNATED_INITIALIZER;</span><br><span class="line"></span><br><span class="line">@property (readonly) NSInteger condition;</span><br><span class="line">- (void)lockWhenCondition:(NSInteger)condition; //会阻塞线程的</span><br><span class="line">- (BOOL)tryLock;//是不会阻塞线程的</span><br><span class="line">- (BOOL)tryLockWhenCondition:(NSInteger)condition;//是不会阻塞线程的</span><br><span class="line">- (void)unlockWithCondition:(NSInteger)condition;</span><br><span class="line">- (BOOL)lockBeforeDate:(NSDate *)limit;//会阻塞线程的</span><br><span class="line">- (BOOL)lockWhenCondition:(NSInteger)condition beforeDate:(NSDate *)limit;//会阻塞线程的</span><br><span class="line"></span><br><span class="line">@property (nullable, copy) NSString *name API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));</span><br></pre></td></tr></table></figure></p>
+<p>我们发现条件condition是NSInteger类型的<br>当condition相等的时候才能获得锁 也就是加锁</p>
+<p>需要注意的是- (void)unlockWithCondition:(NSInteger)condition;<br>这个方法有两个作用1、就是解锁 2、是改变锁的条件</p>
+<p>看下面代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">//主线程中</span><br><span class="line">    NSConditionLock *lock = [[NSConditionLock alloc] initWithCondition:0];</span><br><span class="line">    </span><br><span class="line">    //线程1</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        [lock lockWhenCondition:1];</span><br><span class="line">        NSLog(@&quot;线程1&quot;);</span><br><span class="line">        sleep(2);</span><br><span class="line">        [lock unlock];</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    //线程2</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        sleep(1);//以保证让线程2的代码后执行</span><br><span class="line">        if ([lock tryLockWhenCondition:0]) &#123;</span><br><span class="line">            NSLog(@&quot;线程2&quot;);</span><br><span class="line">            [lock unlockWithCondition:2];</span><br><span class="line">            NSLog(@&quot;线程2解锁成功&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            NSLog(@&quot;线程2尝试加锁失败&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    //线程3</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        sleep(2);//以保证让线程2的代码后执行</span><br><span class="line">        if ([lock tryLockWhenCondition:2]) &#123;</span><br><span class="line">            NSLog(@&quot;线程3&quot;);</span><br><span class="line">            [lock unlock];</span><br><span class="line">            NSLog(@&quot;线程3解锁成功&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            NSLog(@&quot;线程3尝试加锁失败&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    //线程4</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        sleep(3);//以保证让线程2的代码后执行</span><br><span class="line">        if ([lock tryLockWhenCondition:2]) &#123;</span><br><span class="line">            NSLog(@&quot;线程4&quot;);</span><br><span class="line">            [lock unlockWithCondition:1];</span><br><span class="line">            NSLog(@&quot;线程4解锁成功&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            NSLog(@&quot;线程4尝试加锁失败&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">2019-02-21 10:47:29.227968+0800 LJConditionLock[2191:320996] 线程2  （满足了条件，所以先执行了线程2 ，然后改变条件为2）</span><br><span class="line">2019-02-21 10:47:29.228109+0800 LJConditionLock[2191:320996] 线程2解锁成功</span><br><span class="line">2019-02-21 10:47:30.227654+0800 LJConditionLock[2191:320995] 线程3 （线程2改变条件为2 正好等于线程3的条件）</span><br><span class="line">2019-02-21 10:47:30.227843+0800 LJConditionLock[2191:320995] 线程3解锁成功</span><br><span class="line">2019-02-21 10:47:31.226466+0800 LJConditionLock[2191:320997] 线程4</span><br><span class="line">2019-02-21 10:47:31.226634+0800 LJConditionLock[2191:320997] 线程4解锁成功</span><br><span class="line">2019-02-21 10:47:31.226645+0800 LJConditionLock[2191:320994] 线程1</span><br><span class="line"></span><br><span class="line">从结果看 NSConditionLock 还可以实现任务之间的依赖</span><br></pre></td></tr></table></figure></p>
+<p>####NSRecursiveLock–递归锁<br>允许同一线程多次加锁，而不会造成死锁<br>看下面的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">NSLock *lock = [[NSLock alloc] init];</span><br><span class="line"> </span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line"> </span><br><span class="line">    static void (^RecursiveMethod)(int);</span><br><span class="line"> </span><br><span class="line">    RecursiveMethod = ^(int value) &#123;</span><br><span class="line"> </span><br><span class="line">        [lock lock];</span><br><span class="line">        if (value &gt; 0) &#123;</span><br><span class="line"> </span><br><span class="line">            NSLog(@&quot;value = %d&quot;, value);</span><br><span class="line">            sleep(2);</span><br><span class="line">            // 递归调用</span><br><span class="line">            RecursiveMethod(value - 1);</span><br><span class="line">        &#125;</span><br><span class="line">        [lock unlock];</span><br><span class="line">    &#125;;</span><br><span class="line"> </span><br><span class="line">    RecursiveMethod(5);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>这段代码是一个典型的死锁情况。在我们的线程中，RecursiveMethod是递归调用的。所以每次进入这个block时，都会去加一次锁，而从第二次开始，由于锁已经被使用了且没有解锁，所以它需要等待锁被解除，这样就导致了死锁，线程被阻塞住了。<br>递归锁允许同一线程多次加锁，而不会造成死锁，就是用来解决这类递归或者循环加锁问题的</p>
+<p>同样的NSRecursiveLock也有两个方法 ：</p>
+<ul>
+<li>(BOOL)tryLock;<ul>
+<li>(BOOL)lockBeforeDate:(NSDate *)limit;<br>是跟NSLock一样的用法</li>
+</ul>
+</li>
+</ul>
+<p>####pthread_mutex 互斥锁<br>和NSLock<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#import &lt;pthread/pthread.h&gt;</span><br><span class="line"></span><br><span class="line">#define Lock() pthread_mutex_lock(&amp;_lock)</span><br><span class="line">#define Unlock() pthread_mutex_unlock(&amp;_lock)</span><br><span class="line"></span><br><span class="line">@implementation LJpthread_mutexVC</span><br><span class="line">&#123;</span><br><span class="line">    pthread_mutex_t _lock; // 声明</span><br><span class="line">&#125;</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // 初始化</span><br><span class="line">    pthread_mutex_init(&amp;_lock,NULL);</span><br><span class="line">    //线程1</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^&#123;</span><br><span class="line">        Lock();</span><br><span class="line">        NSLog(@&quot;任务1开始&quot;);</span><br><span class="line">        sleep(2);</span><br><span class="line">        NSLog(@&quot;任务1结束&quot;);</span><br><span class="line">        Unlock();</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    //线程2</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^&#123;</span><br><span class="line">        sleep(1);</span><br><span class="line">        Lock();</span><br><span class="line">        NSLog(@&quot;任务2&quot;);</span><br><span class="line">        Unlock();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>1、申明一个互斥锁，pthread_mutex_t _lock;<br>2、初始化它，pthread_mutex_init(&amp; _lock,NULL);<br>3、使用_lock之前一定要初始化，否则不生效<br>4、获得锁，pthread_mutex_lock(&amp; _lock);<br>5、解锁，pthread_mutex_unlock(&amp; _lock);</p>
+<p>####dispatch_semaphore信号量作为锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">/* dispatch_semaphore 只有三个方法</span><br><span class="line"> dispatch_semaphore_create(long value); // 创建信号量 参数是信号数量 必须要大于等于0</span><br><span class="line"> dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout); // 等待获取信号 当前信号量大于等于1的时候 才能获得 获得之后信号量减1</span><br><span class="line"> dispatch_semaphore_signal(dispatch_semaphore_t dsema); // 释放信号量 使信号量加1</span><br><span class="line"> </span><br><span class="line"> 信号量相当于停车场 有n个车位 wait 相当于来了一辆车 如果有空闲车位 就停进去 空闲车位数减一，没有就等待 signal相当于开走一辆 空闲车位数加一</span><br><span class="line"> 在访问共同资源时，可以控制有几个线程来同时访问 当信号量为1时 就相当于锁的作用</span><br><span class="line">*/</span><br><span class="line">@interface LJSemaphoreVC ()</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_semaphore_t sem;</span><br><span class="line">&#125;</span><br><span class="line">/** 售票员01 */</span><br><span class="line">@property (nonatomic, strong) NSThread *thread01;</span><br><span class="line">/** 售票员02 */</span><br><span class="line">@property (nonatomic, strong) NSThread *thread02;</span><br><span class="line">/** 售票员03 */</span><br><span class="line">@property (nonatomic, strong) NSThread *thread03;</span><br><span class="line">/** 票的总数 */</span><br><span class="line">@property (nonatomic, assign) NSInteger ticketCount;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LJSemaphoreVC</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view.</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    sem = dispatch_semaphore_create(1);</span><br><span class="line">    self.ticketCount = 100;</span><br><span class="line">    self.thread01 = [[NSThread alloc] initWithTarget:self selector:@selector(saleTicket) object:nil];</span><br><span class="line">    self.thread01.name = @&quot;售票员01&quot;;</span><br><span class="line">    </span><br><span class="line">    self.thread02 = [[NSThread alloc] initWithTarget:self selector:@selector(saleTicket) object:nil];</span><br><span class="line">    self.thread02.name = @&quot;售票员02&quot;;</span><br><span class="line">    </span><br><span class="line">    self.thread03 = [[NSThread alloc] initWithTarget:self selector:@selector(saleTicket) object:nil];</span><br><span class="line">    self.thread03.name = @&quot;售票员03&quot;;</span><br><span class="line">    </span><br><span class="line">    [self.thread01 start];</span><br><span class="line">    //    sleep(1);</span><br><span class="line">    [self.thread02 start];</span><br><span class="line">    [self.thread03 start];</span><br><span class="line">&#125;</span><br><span class="line">- (void)saleTicket</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">    while (1) &#123;</span><br><span class="line">        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER); // 信号量减1 如果信号量 &gt; 0 获得信号 执行下面代码 否则等待</span><br><span class="line">            // 先取出总数</span><br><span class="line">            NSInteger count = self.ticketCount;</span><br><span class="line">            if (count &gt; 0) &#123;</span><br><span class="line">                self.ticketCount = count - 1;</span><br><span class="line">                NSLog(@&quot;%@卖了一张票，还剩下%zd张&quot;, [NSThread currentThread].name, self.ticketCount);</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                NSLog(@&quot;票卖完了&quot;);</span><br><span class="line">                break; // 跳出循环</span><br><span class="line">            &#125;</span><br><span class="line">        dispatch_semaphore_signal(sem); // 操作完成 信号量加1 释放信号</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有读写锁pthread_rwlock、条件锁NSCondition等就不一一介绍了，主要是理解锁的机制和原理，能够知其所以然。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ好友</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a></div>
+      <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["weixin","sqq","qzone","tsina"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","sqq","qzone","tsina"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>    </footer>
+      
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/01/31/anchorPoint和position详解/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">ios之anchorPoint和position详解</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  <div class="gitalk" id="gitalk-container"></div>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'e154cb1de538be9ff810',
+        clientSecret: '2bb7ef73102ec3b739bf5b011863b71f11062351',
+        repo: 'youyou0909.github.io',
+        owner: 'youyou0909',
+        admin: ['youyou0909'],
+        // id: location.pathname,      // Ensure uniqueness and length less than 50
+        id: md5(location.pathname),
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+  gitalk.render('gitalk-container')
+  </script>
+
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <ul class="list-inline">
+      <li>&copy; 2019 悠悠我心</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://zhwangart.github.io">zhwangart</a></li>
+      <!--
+      <li><a href="/">悠悠我心</a></li>
+      -->
+    </ul>
+  </div>
+</footer>
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="悠悠我心"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">目录</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/photos">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

@@ -56,6 +56,58 @@
 
     
       
+        <article id="post-ios之各种锁机制的使用和理解" class="article article-type-post" itemscope="" itemprop="blogPost">
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/02/23/ios之各种锁机制的使用和理解/">ios之各种锁机制的使用和理解</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/02/23/ios之各种锁机制的使用和理解/" class="article-date">
+  <time datetime="2019-02-23T09:10:43.000Z" itemprop="datePublished">2019-02-23</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>锁可以分为两大类：自旋锁（OSSpinLock）和互斥锁（pthread_mutex）。</p>
+<p>相同点：<br>都能保证同一时间只有一个线程访问共享资源。都能保证线程安全。</p>
+<p>不同点：<br>互斥锁：如果共享数据已经有其他线程加锁了，线程会进入休眠状态等待锁。一旦被访问的资源被解锁，则等待资源的线程会被唤醒。<br>自旋锁：如果共享数据已经有其他线程加锁了，线程会以死循环的方式等待锁，一旦被访问的资源被解锁，则等待资源的线程会立即执行。<br>自旋锁的效率高于互斥锁。</p>
+<p>各种锁性能：<br>除了 OSSpinLock 外，dispatch_semaphore 和 pthread_mutex 性能是最高 @synchronized() 是性能最低的<br>
+        
+          <a class="article-more-link" href="/2019/02/23/ios之各种锁机制的使用和理解/">阅读全文...</a>
+        
+      
+    </p></div>
+    <footer class="article-footer">
+      <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ好友</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a></div>
+      <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["weixin","sqq","qzone","tsina"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","sqq","qzone","tsina"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>    </footer>
+      
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-anchorPoint和position详解" class="article article-type-post" itemscope="" itemprop="blogPost">
 
   <div class="article-inner">
@@ -484,53 +536,6 @@
         
           <a class="article-more-link" href="/2019/01/23/5CADisplayLink小知识点获得FPS/">阅读全文...</a>
         
-      
-    </div>
-    <footer class="article-footer">
-      <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ好友</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a></div>
-      <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["weixin","sqq","qzone","tsina"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","sqq","qzone","tsina"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>    </footer>
-      
-  </div>
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-4解决Mac和iOS模拟器间拷贝粘贴的问题" class="article article-type-post" itemscope="" itemprop="blogPost">
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/01/23/4解决Mac和iOS模拟器间拷贝粘贴的问题/">解决Mac和iOS模拟器间拷贝粘贴的问题</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/01/23/4解决Mac和iOS模拟器间拷贝粘贴的问题/" class="article-date">
-  <time datetime="2019-01-23T03:08:44.386Z" itemprop="datePublished">2019-01-23</time>
-</a>
-        
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-        <p>1、检查模拟器的Edit &gt; Automatically Sync Pasteboard是否勾选 如果失效了可以关闭再打开试试<br>2、按照上述操作还不行的,注意 HardWare =&gt; keyboard =&gt; send menu keyboard … 处于勾选状态~</p>
-
       
     </div>
     <footer class="article-footer">
